@@ -1,0 +1,102 @@
+{
+ "id": "/dev/",
+ "name": "Civic Archive (draft)",
+ "short_name": "Archive draft",
+ "description": "Every bill and recorded vote in Congress, the fifty state legislatures, and who is on your ballot, from official records.",
+ "lang": "en-US",
+ "dir": "ltr",
+ "start_url": "/dev/",
+ "scope": "/dev/",
+ "display": "standalone",
+ "background_color": "#F6F3EC",
+ "theme_color": "#1E4A41",
+ "categories": [
+  "government",
+  "education",
+  "news"
+ ],
+ "icons": [
+  {
+   "src": "/dev/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/dev/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/dev/icon-512-maskable.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  },
+  {
+   "src": "/dev/icon.svg",
+   "sizes": "any",
+   "type": "image/svg+xml"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "My ballot",
+   "short_name": "My ballot",
+   "description": "The ballot you kept on this device",
+   "url": "/dev/ballot/kept/",
+   "icons": [
+    {
+     "src": "/dev/icon-192.png",
+     "sizes": "192x192",
+     "type": "image/png"
+    }
+   ]
+  },
+  {
+   "name": "Plain Congress",
+   "short_name": "Congress",
+   "description": "Every bill and recorded vote",
+   "url": "/dev/us/",
+   "icons": [
+    {
+     "src": "/dev/icon-192.png",
+     "sizes": "192x192",
+     "type": "image/png"
+    }
+   ]
+  },
+  {
+   "name": "On The Ballot",
+   "short_name": "Ballot",
+   "description": "Who is on your November ballot",
+   "url": "/dev/ballot/",
+   "icons": [
+    {
+     "src": "/dev/icon-192.png",
+     "sizes": "192x192",
+     "type": "image/png"
+    }
+   ]
+  },
+  {
+   "name": "Election Night",
+   "short_name": "Results",
+   "description": "Follow the count, race by race",
+   "url": "/dev/night/",
+   "icons": [
+    {
+     "src": "/dev/icon-192.png",
+     "sizes": "192x192",
+     "type": "image/png"
+    }
+   ]
+  }
+ ],
+ "related_applications": [
+  {
+   "platform": "webapp",
+   "url": "https://thecivicarchive.org/dev/manifest.webmanifest"
+  }
+ ],
+ "prefer_related_applications": false
+}
