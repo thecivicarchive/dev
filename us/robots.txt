@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://thecivicarchive.org/dev/us/sitemap.xml
