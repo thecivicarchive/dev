@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Front Page: The Civic Archive</title>
+<meta name="description" content="Read it like a newspaper.">
+<meta name="version" content="4.1.070">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="../../../favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="../../../icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../../apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Civic Archive">
+<meta property="og:title" content="The Front Page: The Civic Archive">
+<meta property="og:description" content="Read it like a newspaper.">
+<meta property="og:url" content="https://thecivicarchive.org/dev/">
+<meta property="og:image" content="https://thecivicarchive.org/dev/og/home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Civic Archive emblem, a hall of books with a brass pediment, beside the words The Front Page: The Civic Archive">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Front Page: The Civic Archive">
+<meta name="twitter:description" content="Read it like a newspaper.">
+<meta name="twitter:image" content="https://thecivicarchive.org/dev/og/home.png">
+<meta name="theme-color" content="#1E4A41">
+<script>(function () {
+  var d = document.documentElement, KEY = "tca.a11y.v1";
+  var ALLOW = {
+    depth: ["standard", "detailed", "focus"], lang: ["standard", "plain"], face: ["standard", "dyslexia", "hyperlegible"],
+    scale: ["100", "115", "130", "150", "200"], space: ["standard", "generous"], contrast: ["standard", "high", "dark"],
+    palette: ["standard", "deut", "prot", "trit", "mono"], motion: ["full", "reduced"], calm: ["off", "on"],
+    reveal: ["full", "subtle", "off"], companion: ["on", "still", "off"], sheets: ["full", "quick", "instant"],
+    level: ["3", "1", "2", "4", "5", "6"], focus: ["none", "ballot", "reps", "congress", "state", "results"],
+    language: ["en", "es", "qps"]
+  };
+  var PERCH = ["chickadee"];
+  var get = function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } };
+  var mq = function (q) { try { return window.matchMedia(q).matches; } catch (e) { return false; } };
+  var ax = {}, k, saved = null;
+  for (k in ALLOW) ax[k] = ALLOW[k][0];
+  try { saved = JSON.parse(get(KEY) || "null"); } catch (e) { saved = null; }
+  if (saved && typeof saved === "object") {
+    for (k in ALLOW) if (ALLOW[k].indexOf(String(saved[k])) >= 0) ax[k] = String(saved[k]);
+  } else {
+    if (mq("(prefers-reduced-motion: reduce)")) ax.motion = "reduced";
+    if (mq("(prefers-contrast: more)")) ax.contrast = "high";
+  }
+  if (!saved || !saved.level) {
+    try { var mm = JSON.parse(get("tca.meet.v1") || "null"); if (mm && mm.level >= 1 && mm.level <= 6) ax.level = String(mm.level);
+      if (mm && ALLOW.focus.indexOf(String(mm.focus)) >= 0 && (!saved || !saved.focus)) ax.focus = String(mm.focus); } catch (e) {}
+  }
+  var theme = get("theme"), motion = get("motion");
+  if (theme === "dark" && ax.contrast === "standard") ax.contrast = "dark";
+  if (theme === "light" && ax.contrast === "dark") ax.contrast = "standard";
+  if (motion === "off" && ax.calm !== "on") ax.motion = "reduced";
+  if (motion === "on") ax.motion = "full";
+  for (k in ax) d.setAttribute("data-" + k, ax[k]);
+  var I18N = {"base":"/dev/shell/lang/","files":{"qps":{"guide":"qps.guide.4f74e42377.json","core":"qps.core.a00e74dd62.json","home":"qps.home.0aadc1479a.json","access":"qps.access.3d91b0cc00.json","app":"qps.app.aa50e626a4.json","meet":"qps.meet.c1ab1fe723.json","ballot":"qps.ballot.6767188983.json"},"es":{"app":"es.app.a824961068.json","meet":"es.meet.8784328afc.json","home":"es.home.82232c5841.json","core":"es.core.d2cb9d08dd.json","access":"es.access.6216332b93.json","guide":"es.guide.65daeb99f2.json","ballot":"es.ballot.3ec9798854.json"}},"loc":{"en":"en-US","es":"es-US","qps":"en-US"}};
+  if (ax.language !== "en") {
+    d.classList.add("tca-i18n-wait");
+    setTimeout(function () { d.classList.remove("tca-i18n-wait"); }, 2600);
+    var LF = I18N.files[ax.language] || {}, LP = window.__tcaLP = {}, LB = ["core"].concat((d.getAttribute("data-i18n") || "").split(" "));
+    for (var li = 0; li < LB.length; li++) if (LB[li] && LF[LB[li]] && window.fetch) (function (b) {
+      LP[b] = fetch(I18N.base + LF[b], {credentials: "same-origin"}).then(function (r) { return r.ok ? r.json() : null; })["catch"](function () { return null; });
+    })(LB[li]);
+  }
+  var skin = get("tca.companion.skin");
+  d.setAttribute("data-perch", (ax.companion !== "off" && skin && PERCH.indexOf(skin) >= 0) ? "on" : "off");
+  var n = navigator, c = n.connection || {}, lean = false;
+  try { lean = (n.deviceMemory && n.deviceMemory < 4) || (n.hardwareConcurrency && n.hardwareConcurrency <= 4) || !!c.saveData; } catch (e) { lean = false; }
+  d.setAttribute("data-lean", lean ? "on" : "off");
+  try {
+    var arrive = sessionStorage.getItem("tca.night.arrive");
+    if (arrive) {
+      sessionStorage.removeItem("tca.night.arrive");
+      if (/\/night\/(index\.html)?$/.test(location.pathname)) d.setAttribute("data-arrive", arrive === "quick" ? "quick" : arrive === "full" ? "night" : "skip");
+    }
+  } catch (e) {}
+  try {
+    var app = ["standalone", "fullscreen", "minimal-ui", "window-controls-overlay"].some(function (m) { return mq("(display-mode: " + m + ")"); }) || navigator.standalone === true;
+    var appS = JSON.parse(get("tca.app.v1:" + (/^\/dev\//.test(location.pathname) ? "/dev/" : "/")) || "null");
+    if (app) d.setAttribute("data-app", "app"); else if (appS && appS.inst) d.setAttribute("data-app", "installed");
+  } catch (e) {}
+  d.classList.add("js");
+})();</script>
+<link rel="stylesheet" href="../../../shell/shell.7b4b7cfc14.css">
+<script type="module" src="../../../shell/shell.76f81689d8.js"></script>
+<link rel="manifest" href="../../../manifest.webmanifest" data-tca-manifest>
+<meta name="apple-mobile-web-app-title" content="Archive draft" data-tca-manifest>
+</head>
+<body>
+<a class="tca-skip" href="#main" data-t="1jele5i">Skip to content</a>
+<aside class="tca-draft" aria-label="Draft" data-ta="aria-label:129n38s" data-t="0eb0y6g">A draft for feedback, not the live site. <a href="https://thecivicarchive.org/">Go to the live site</a></aside>
+
+<header class="tca-top">
+<div class="tca-bar">
+<a class="tca-brand" href="../../../" aria-label="The Civic Archive, home" data-ta="aria-label:033aetz"><svg viewBox="0 0 28 28" aria-hidden="true" focusable="false"><path class="b" d="M14 3v2.5"/><path class="b" d="M6.5 13.5a7.5 7.5 0 0 1 15 0"/><path d="M4 13.5h20"/><path d="M6.5 16.5v6M11.5 16.5v6M16.5 16.5v6M21.5 16.5v6"/><path d="M3 24h22"/></svg><span class="wm" translate="no">The Civic Archive</span></a>
+<nav class="tca-nav" aria-label="Main" data-ta="aria-label:0mlh3jc">
+<ul>
+<li><button type="button" aria-expanded="false" aria-controls="tca-mega-bills" data-t="1m6rdec">Bills<svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg></button><div class="tca-mega" id="tca-mega-bills" hidden>
+<div class="tca-wrap">
+<div><a class="lead-link" href="../../../us/"><span class="tca-ico" data-icon="bills" data-tile="brass"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="i-s2"><path class="i-fill" pathLength="1" d="M7.4 5h7.3l2.9 2.9V19.6H7.4z"/></g><g class="i-s1"><path class="i-fill" pathLength="1" d="M7.4 5h7.3l2.9 2.9V19.6H7.4z"/></g><g class="i-pg"><path class="i-fill" pathLength="1" d="M7.4 5h7.3l2.9 2.9V19.6H7.4z"/><path pathLength="1" d="M14.7 5v2.9h2.9"/><path pathLength="1" d="M9.8 11.1h5.4"/><path pathLength="1" d="M9.8 13.9h5.4"/><path pathLength="1" d="M9.8 16.7h3.4"/></g></svg></span><span><b data-t="1bd9dmr">Plain Congress</b><br><small data-t="1c18h4e" data-tv="{&quot;0&quot;:&quot;119&quot;}">Every bill and recorded vote of the 119th Congress</small></span></a>
+<h2 data-t="042k35z">Browse</h2><ul>
+<li><a href="../../../us/#bills" data-t="0ine8qr">Every bill<small>Newest action first. Filter by status or topic there</small></a></li>
+<li><a href="../../../us/#nowmoving" data-t="0hahm4o">Moving now, and already law<small>Ten bills worth knowing about</small></a></li>
+<li><a href="../../../us/#yours" data-t="0mvog99">How did your members vote?<small>Pick your state</small></a></li></ul></div>
+<div><h2 data-t="15cdqf0">Tools</h2><ul>
+<li><a href="../../../us/#map" data-t="09f1llw">Who voted how, state by state<small>The vote map</small></a></li>
+<li><a href="../../../us/#shapes" data-t="07q3tbd">The shape of every district<small>Measured, never judged</small></a></li>
+<li><a href="../../../us/#people" data-t="0sncl5l">Who lives in each district<small>The Census Bureau's counts</small></a></li>
+<li><a href="../../../us/#money" data-t="02s6cv9">Follow the money<small>Organizations behind each campaign</small></a></li>
+<li><a href="../../../dashboard/#record" data-t="0tkfm8s">Dashboard<small>Bills and votes by month, as charts</small></a></li></ul></div>
+<div><h2 data-t="1lrzbkg">How it works</h2><ul>
+<li><a href="../../../us/#how" data-t="09f8vm7">How the ratings work<small>Evidence grades and reasons</small></a></li>
+<li><a href="../../../method/" data-t="0chxltd">Method<small>Sources, the rubric, and what the site refuses to do</small></a></li></ul>
+<p class="note" data-t="1alooij">There is no corrections log yet.</p></div>
+</div></div></li>
+<li><a href="../../../ballot/" data-t="0df8di7">Ballot</a></li>
+<li><a class="tca-nav-night" href="../../../night/"><svg class="tca-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle class="es" cx="11" cy="13" r="7.2"/><path class="cr" d="M11 5.8A7.2 7.2 0 1 0 17.65 15.77A6 6 0 0 1 11 5.8z"/><path class="st" d="M19.6 2.9v3.2M18 4.5h3.2"/></svg><span data-t="00ub434">Election Night</span></a></li>
+<li><button type="button" aria-expanded="false" aria-controls="tca-mega-officials" data-t="0akknxk">Officials<svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg></button><div class="tca-mega" id="tca-mega-officials" hidden>
+<div class="tca-wrap">
+<div><a class="lead-link" href="../../../us/#members"><span class="tca-ico" data-icon="officials" data-tile="brass"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="i-l"><path pathLength="1" d="M6.1 8.3a1.9 1.9 0 1 1 0 3.8a1.9 1.9 0 1 1 0-3.8z"/><path pathLength="1" d="M2.6 18.6c0-2.4 1.5-4.2 3.5-4.2c.9 0 1.7.3 2.3.9"/></g><g class="i-r"><path pathLength="1" d="M17.9 8.3a1.9 1.9 0 1 1 0 3.8a1.9 1.9 0 1 1 0-3.8z"/><path pathLength="1" d="M21.4 18.6c0-2.4-1.5-4.2-3.5-4.2c-.9 0-1.7.3-2.3.9"/></g><g class="i-c"><path class="i-fill i-solid" d="M6.8 20.2c0-3.2 2.3-5.7 5.2-5.7s5.2 2.5 5.2 5.7z"/><path class="i-fill" pathLength="1" d="M12 5.5a2.7 2.7 0 1 1 0 5.4a2.7 2.7 0 1 1 0-5.4z"/><path pathLength="1" d="M6.8 20.2c0-3.2 2.3-5.7 5.2-5.7s5.2 2.5 5.2 5.7"/></g></svg></span><span><b data-t="0jgh354">Your members of Congress</b><br><small data-t="09hzuew">Service, votes, and who funds them</small></span></a>
+<h2 data-t="1g29lmo">In Congress</h2><ul>
+<li><a href="../../../us/#members" data-t="1svy4c9">Find a senator or representative<small>With their party, and against it</small></a></li>
+<li><a href="../../../us/#money" data-t="0w1m56p">Who funds them<small>Organizations only; people as totals</small></a></li></ul></div>
+<div><h2 data-t="1jmimil">In the states</h2><form class="tca-pick" action="#"><label for="tca-pick-mega" data-t="0feoib6">Your state<select id="tca-pick-mega"><option value="" data-t="1nkgz6y">Choose a state</option><option value="../../../al/" translate="no">Alabama</option><option value="../../../ak/" translate="no">Alaska</option><option value="../../../az/" translate="no">Arizona</option><option value="../../../ar/" translate="no">Arkansas</option><option value="../../../ca/" translate="no">California</option><option value="../../../co/" translate="no">Colorado</option><option value="../../../ct/" translate="no">Connecticut</option><option value="../../../de/" translate="no">Delaware</option><option value="../../../fl/" translate="no">Florida</option><option value="../../../ga/" translate="no">Georgia</option><option value="../../../hi/" translate="no">Hawaii</option><option value="../../../id/" translate="no">Idaho</option><option value="../../../il/" translate="no">Illinois</option><option value="../../../in/" translate="no">Indiana</option><option value="../../../ia/" translate="no">Iowa</option><option value="../../../ks/" translate="no">Kansas</option><option value="../../../ky/" translate="no">Kentucky</option><option value="../../../la/" translate="no">Louisiana</option><option value="../../../me/" translate="no">Maine</option><option value="../../../md/" translate="no">Maryland</option><option value="../../../ma/" translate="no">Massachusetts</option><option value="../../../mi/" translate="no">Michigan</option><option value="../../../mn/" translate="no">Minnesota</option><option value="../../../ms/" translate="no">Mississippi</option><option value="../../../mo/" translate="no">Missouri</option><option value="../../../mt/" translate="no">Montana</option><option value="../../../ne/" translate="no">Nebraska</option><option value="../../../nv/" translate="no">Nevada</option><option value="../../../nh/" translate="no">New Hampshire</option><option value="../../../nj/" translate="no">New Jersey</option><option value="../../../nm/" translate="no">New Mexico</option><option value="../../../ny/" translate="no">New York</option><option value="../../../nc/" translate="no">North Carolina</option><option value="../../../nd/" translate="no">North Dakota</option><option value="../../../oh/" translate="no">Ohio</option><option value="../../../ok/" translate="no">Oklahoma</option><option value="../../../or/" translate="no">Oregon</option><option value="../../../pa/" translate="no">Pennsylvania</option><option value="../../../ri/" translate="no">Rhode Island</option><option value="../../../sc/" translate="no">South Carolina</option><option value="../../../sd/" translate="no">South Dakota</option><option value="../../../tn/" translate="no">Tennessee</option><option value="../../../tx/" translate="no">Texas</option><option value="../../../ut/" translate="no">Utah</option><option value="../../../vt/" translate="no">Vermont</option><option value="../../../va/" translate="no">Virginia</option><option value="../../../wa/" translate="no">Washington</option><option value="../../../wv/" translate="no">West Virginia</option><option value="../../../wi/" translate="no">Wisconsin</option><option value="../../../wy/" translate="no">Wyoming</option></select></label><button type="submit" data-t="0i9euzv">Go</button></form><ul>
+<li><a href="../../../rooms.html#states" data-t="14z3549">Choose a state on the map<small>Every state legislature, its districts and members</small></a></li>
+<li><a href="../../../dashboard/#place" data-t="0a316lk">Dashboard: your state at a glance<small>Its ballot and who holds its seats, in numbers</small></a></li></ul></div>
+<div><h2 data-t="1dw2crj">Closer to home</h2><ul><li><span class="tca-soon" data-t="10awglc">County and city officials<small>Who holds each office, for every state. Coming soon</small></span></li>
+<li><a href="../../../ballot/states/#local" data-t="1yurdh0" data-tv="{&quot;0&quot;:&quot;3&quot;}">County and local races<small>On the November 3 ballot</small></a></li></ul></div>
+</div></div></li>
+<li><a href="../../../method/" data-t="16cmxjk">Method</a></li>
+<li><a href="../../../access/" data-t="0ow1nnv">Access</a></li>
+</ul>
+</nav>
+<div class="tca-tools">
+<a class="tca-tb app" href="../../../app/" data-tca-app><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6.5" y="2.5" width="11" height="19" rx="2.4"/><path d="M12 6.8v7.2M9.1 11.3 12 14.2l2.9-2.9"/><path d="M10.4 18.3h3.2"/></svg><span class="lab-app" data-t="18pmd3r">Get the app</span></a>
+<button class="tca-tb help" type="button" data-tca-open aria-controls="tca-help" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4z"/><path d="M9.2 9.4a2.8 2.8 0 0 1 5.5.6c0 1.6-2.2 1.9-2.2 3.2"/><path d="M12.5 15.6v.01"/></svg><span class="lab-help" data-t="1f8350a">Help</span></button>
+<button class="tca-tb access" type="button" data-tca-open aria-controls="tca-access" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><path d="M15 4.6a2.4 2.4 0 1 1 0 4.8a2.4 2.4 0 1 1 0-4.8zM9 14.6a2.4 2.4 0 1 1 0 4.8a2.4 2.4 0 1 1 0-4.8z"/></svg><span class="lab-access" data-t="1jkfxkd">Reading &amp; access</span></button>
+<button class="tca-tb motion" id="tca-motion" type="button" aria-pressed="true"><span class="tca-switch" aria-hidden="true"></span><span class="lab-motion" data-t="1be7sjr">Motion</span></button>
+<button class="tca-tb tca-burger" id="tca-burger" type="button" aria-expanded="false" aria-controls="tca-sheet" aria-label="Menu" data-ta="aria-label:007q5wa"><span class="bl" aria-hidden="true"></span></button>
+</div>
+</div>
+</header>
+<nav class="tca-sheet" id="tca-sheet" aria-label="Menu" hidden data-ta="aria-label:007q5wa">
+<ul class="tca-rows"><li><a href="../../../us/"><span class="tca-ico" data-icon="bills" data-tile="brass"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="i-s2"><path class="i-fill" pathLength="1" d="M7.4 5h7.3l2.9 2.9V19.6H7.4z"/></g><g class="i-s1"><path class="i-fill" pathLength="1" d="M7.4 5h7.3l2.9 2.9V19.6H7.4z"/></g><g class="i-pg"><path class="i-fill" pathLength="1" d="M7.4 5h7.3l2.9 2.9V19.6H7.4z"/><path pathLength="1" d="M14.7 5v2.9h2.9"/><path pathLength="1" d="M9.8 11.1h5.4"/><path pathLength="1" d="M9.8 13.9h5.4"/><path pathLength="1" d="M9.8 16.7h3.4"/></g></svg></span><span><b data-t="01bdr31">Bills</b><span class="d" data-t="0fxxutg">Plain Congress: every bill and vote</span></span></a></li><li><a href="../../../ballot/"><span class="tca-ico" data-icon="ballot" data-tile="verd"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="i-box"><path pathLength="1" d="M4.4 12.6h15.2v7.4H4.4z"/><path pathLength="1" d="M8.3 15.4h7.4"/></g><g class="i-paper"><path class="i-fill" pathLength="1" d="M8.4 3.8h7.2v8.8H8.4z"/><path class="i-tick" pathLength="1" d="M10.1 8.3l1.5 1.5 2.4-2.7"/></g></svg></span><span><b data-t="0df8di7">Ballot</b><span class="d" data-t="0gftzx9">Who is on your November ballot</span></span></a></li><li><a href="../../../night/"><span class="tca-ico" data-icon="night" data-tile="brass"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="i-moon" pathLength="1" d="M6.81 3.92A3.5 3.5 0 1 0 10.61 8.17A2.9 2.9 0 0 1 6.81 3.92z"/><path class="i-fill i-b1" pathLength="1" d="M5.4 19.6V15.6h2.8v4z"/><path class="i-fill i-b2" pathLength="1" d="M10.6 19.6V12.4h2.8v7.2z"/><path class="i-fill i-b3" pathLength="1" d="M15.8 19.6V9.2h2.8v10.4z"/><path pathLength="1" d="M3.6 19.6h16.8"/></svg></span><span><b data-t="00ub434">Election Night</b><span class="d" data-t="0evi67r">Follow the count, race by race</span></span></a></li><li><a href="../../../#officials"><span class="tca-ico" data-icon="officials" data-tile="brass"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="i-l"><path pathLength="1" d="M6.1 8.3a1.9 1.9 0 1 1 0 3.8a1.9 1.9 0 1 1 0-3.8z"/><path pathLength="1" d="M2.6 18.6c0-2.4 1.5-4.2 3.5-4.2c.9 0 1.7.3 2.3.9"/></g><g class="i-r"><path pathLength="1" d="M17.9 8.3a1.9 1.9 0 1 1 0 3.8a1.9 1.9 0 1 1 0-3.8z"/><path pathLength="1" d="M21.4 18.6c0-2.4-1.5-4.2-3.5-4.2c-.9 0-1.7.3-2.3.9"/></g><g class="i-c"><path class="i-fill i-solid" d="M6.8 20.2c0-3.2 2.3-5.7 5.2-5.7s5.2 2.5 5.2 5.7z"/><path class="i-fill" pathLength="1" d="M12 5.5a2.7 2.7 0 1 1 0 5.4a2.7 2.7 0 1 1 0-5.4z"/><path pathLength="1" d="M6.8 20.2c0-3.2 2.3-5.7 5.2-5.7s5.2 2.5 5.2 5.7"/></g></svg></span><span><b data-t="0qe2y2x">Officials</b><span class="d" data-t="13x9uqg">Congress and your statehouse</span></span></a></li><li><a href="../../../method/"><span class="tca-ico" data-icon="method" data-tile="verd"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="i-fill" pathLength="1" d="M12 3.5l6.9 2.6v5.3c0 4.3-2.9 7.6-6.9 9.1c-4-1.5-6.9-4.8-6.9-9.1V6.1z"/><path class="i-scan" pathLength="1" d="M7.2 7.4h9.6"/><path class="i-ck" pathLength="1" d="M8.8 12.2l2.3 2.3 4.2-4.5"/></svg></span><span><b data-t="16cmxjk">Method</b><span class="d" data-t="1oztllk">How each page is made</span></span></a></li><li><a href="../../../access/"><span class="tca-ico" data-icon="access" data-tile="both"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="i-rip" pathLength="1" d="M12 2.9a9.1 9.1 0 1 1 0 18.2a9.1 9.1 0 1 1 0-18.2z"/><path class="i-ring" pathLength="1" d="M12 2.9a9.1 9.1 0 1 1 0 18.2a9.1 9.1 0 1 1 0-18.2z"/><path pathLength="1" d="M12 5.8a1.5 1.5 0 1 1 0 3a1.5 1.5 0 1 1 0-3z"/><path class="i-arm-l" pathLength="1" d="M12 10.7L7.5 9.8"/><path class="i-arm-r" pathLength="1" d="M12 10.7l4.5-.9"/><path pathLength="1" d="M12 10.7v3.6"/><path pathLength="1" d="M12 14.3l-2.3 4.1"/><path pathLength="1" d="M12 14.3l2.3 4.1"/></svg></span><span><b data-t="0ow1nnv">Access</b><span class="d" data-t="02fm8hg">Reading and access, and what is not done yet</span></span></a></li></ul>
+<div class="tca-tail"><h2 data-t="0lz65mo">More</h2><ul><li><a href="../../../ballot/forecasts/" data-t="1qxs8ic">Forecasts: every race&rsquo;s chances, as Analysis</a></li><li><a href="../../../dashboard/" data-t="1xcqx5u">Dashboard: the record in numbers</a></li><li><a href="../../../rooms.html" data-t="0nq77jw">All levels: the ring of cards</a></li><li><a href="../../../cabin.html" data-t="09bepiq">Take a break: the cabin</a></li><li><a href="../../../method/#sources" data-t="195ydw1">Sources</a></li></ul></div>
+</nav>
+<div class="tca-progress" aria-hidden="true"></div>
+<main id="main">
+<div class="tca-wrap fp" data-fp-root data-fp-len="2"><style>
+.nbl{color:var(--verd-ink);text-decoration:underline;text-decoration-style:dotted;text-decoration-thickness:1.5px;text-underline-offset:3px;font-weight:600;overflow-wrap:anywhere}
+.nbl:hover,.nbl:focus-visible{text-decoration-style:solid;color:var(--ink)}
+.nbl-i{display:inline-block;width:.95em;height:1.05em;margin-right:.28em;vertical-align:-.16em;border-radius:2px 3px 3px 2px;border:1.5px solid currentColor;border-left-width:3px;position:relative;opacity:.85}
+.nbl-i::after{content:"";position:absolute;left:2px;right:2px;top:35%;border-top:1.5px solid currentColor;opacity:.7}
+.sbx-note{font-family:var(--font-ui);font-size:var(--fs-s);line-height:1.45;color:var(--draft-ink);background:var(--draft-bg);border-radius:var(--radius-s);padding:10px 14px;margin:0}
+.sbx-crumb{font-family:var(--font-ui);font-size:var(--fs-s);color:var(--ink-2);display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin:0}
+.sbx-crumb a{color:var(--ink-2)}
+.sbx-switch{display:flex;flex-wrap:wrap;gap:6px}
+.sbx-switch a{font-family:var(--font-ui);font-size:var(--fs-xs);border:1px solid var(--line-strong);border-radius:999px;padding:6px 12px;color:var(--ink);text-decoration:none;min-height:32px;display:inline-flex;align-items:center}
+.sbx-switch a[aria-current="page"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.fp{--fp-dem:#3B5FBF;--fp-rep:#BF4A3F;--fp-oth:color-mix(in srgb,var(--ink) 42%,var(--bg));--fp-oth2:color-mix(in srgb,var(--ink) 24%,var(--bg));
+  --fp-margin:272px;--fp-measure:64ch;--fp-gap:48px;padding-top:calc(var(--sp-unit) * 2);padding-bottom:calc(var(--sp-unit) * 10);display:grid;gap:calc(var(--sp-unit) * 3);font-family:var(--font-body)}
+:root[data-contrast="dark"] .fp{--fp-dem:#7E9BFF;--fp-rep:#FF7B72}
+:root[data-contrast="high"] .fp{--fp-dem:#1F3FA8;--fp-rep:#A4261B;--fp-oth:#555;--fp-oth2:#8A8A8A}
+.fp-prog{position:sticky;top:var(--bar-h,62px);z-index:5;height:3px;background:var(--line);margin:0;border-radius:2px;overflow:hidden}
+.fp-prog i{display:block;height:100%;background:var(--brass);transform-origin:left;transform:scaleX(0)}
+.fp-top{display:grid;gap:12px}
+.fp-kick{font-family:var(--font-ui);font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--brass-ink);font-weight:700}
+.fp-mast{display:grid;grid-template-columns:minmax(0,1fr);gap:14px 28px;align-items:end;border-bottom:4px double var(--ink);padding-bottom:14px}
+@media (min-width:760px){.fp-mast{grid-template-columns:minmax(0,1fr) auto}}
+.fp-plate{font-family:var(--font-head);font-size:clamp(1.9rem,1.4rem + 1.8vw,2.6rem);line-height:1;letter-spacing:.005em;color:var(--ink)}
+.fp-date{font-family:var(--font-ui);font-size:var(--fs-s);color:var(--ink-2);margin-top:8px;display:flex;flex-wrap:wrap;gap:4px 0}
+.fp-date b{color:var(--ink);font-weight:700}
+.fp-date>*+*::before{content:"\00B7";margin:0 8px;color:var(--line-strong)}
+.fp-lenbox{display:grid;gap:6px;justify-items:start}
+@media (min-width:760px){.fp-lenbox{justify-items:end}}
+.fp-len{all:unset;display:inline-flex;flex-wrap:wrap;gap:4px;padding:3px;border:1px solid var(--line-strong);border-radius:999px;background:var(--surface)}
+.fp-len legend{position:absolute;width:1px;height:1px;overflow:clip;clip:rect(0 0 0 0);white-space:nowrap}
+.fp-len label{position:relative;display:inline-flex}
+.fp-len input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.fp-len span{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;min-height:38px;padding:4px 14px;border-radius:999px;font-family:var(--font-ui);font-size:var(--fs-s);font-weight:700;color:var(--ink);line-height:1.1;cursor:pointer}
+.fp-len small{font-size:var(--fs-xs);font-weight:400;color:var(--ink-2);margin-top:2px}
+.fp-len input:checked+span{background:var(--ink);color:var(--bg)}
+.fp-len input:checked+span small{color:var(--bg);opacity:.8}
+.fp-len input:focus-visible+span{outline:var(--focus-w,3px) solid var(--focus);outline-offset:2px}
+.fp-len label:hover input:not(:checked)+span{background:var(--surface-2)}
+.fp-lenhint{font-family:var(--font-ui);font-size:var(--fs-xs);color:var(--ink-2);min-height:1.2em}
+/* the headline */
+.fp-art{display:grid;gap:calc(var(--sp-unit) * 3);max-width:calc(var(--fp-measure) + var(--fp-margin) + var(--fp-gap));min-width:0}
+.fp-head{display:grid;gap:16px}
+.fp-h1{font-size:clamp(2.1rem,1.3rem + 4.2vw,4.3rem);line-height:var(--lh-head,1.08);letter-spacing:-.012em;max-width:22ch}
+.fp-stand{font-size:clamp(1.08rem,1rem + .55vw,1.3rem);line-height:1.45;color:var(--ink);max-width:var(--fp-measure)}
+.fp-by{font-family:var(--font-ui);font-size:var(--fs-s);color:var(--ink-2);display:flex;flex-wrap:wrap;gap:4px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:9px 0;max-width:var(--fp-measure)}
+.fp-by>span:first-child{font-weight:700;color:var(--ink)}
+.fp-by>*+*::before{content:"\00B7";margin:0 8px;color:var(--line-strong)}
+/* the lead */
+.fp-lead{display:grid;gap:14px;padding:6px 0 10px;border-bottom:1px solid var(--line)}
+.fp-tally{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px 18px;align-items:end}
+@media (min-width:640px){.fp-tally{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}}
+.fp-cand{display:grid;gap:2px;min-width:0;align-content:end}
+.fp-cand.is-second{text-align:right;justify-items:end}
+.fp-cn{font-family:var(--font-ui);font-weight:700;font-size:var(--fs-l);display:flex;align-items:center;gap:8px;line-height:1.2}
+.is-second .fp-cn{flex-direction:row-reverse}
+.fp-sw{width:12px;height:12px;border-radius:3px;background:var(--fp-c);flex:none}
+.fp-cp{font-family:var(--font-ui);font-size:var(--fs-s);color:var(--ink-2)}
+.fp-big{font-family:var(--font-head);font-weight:var(--head-weight,400);font-size:clamp(2.9rem,1.4rem + 8vw,6.4rem);line-height:.95;margin-top:6px;font-variant-numeric:tabular-nums;letter-spacing:-.025em;color:var(--ink)}
+.fp-votes{font-family:var(--font-ui);font-size:var(--fs-s);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.fp-gapb{grid-column:1 / -1;order:3;text-align:center;border-top:1px dashed var(--line-strong);padding-top:10px;display:grid;gap:2px;justify-items:center}
+@media (min-width:640px){.fp-gapb{grid-column:auto;order:0;border-top:0;padding:0 14px 12px;border-left:1px dashed var(--line-strong);border-right:1px dashed var(--line-strong)}}
+.fp-gapn{font-family:var(--font-head);font-size:clamp(1.7rem,1.3rem + 1.6vw,2.5rem);line-height:1;color:var(--brass-ink);font-variant-numeric:tabular-nums}
+.fp-gapl{font-family:var(--font-ui);font-size:var(--fs-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);font-weight:700}
+.fp-gapv{font-family:var(--font-ui);font-size:var(--fs-s);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.fp-bar{display:flex;gap:2px;height:30px;border-radius:7px;overflow:hidden;position:relative;background:var(--surface-2)}
+.fp-bar span{display:block;flex:0 0 auto;height:100%;background:var(--fp-c);min-width:2px}
+.fp-bar::after{content:"";position:absolute;inset:0;background:var(--bg);transform-origin:right;transform:scaleX(0)}
+.fp-leg{font-family:var(--font-ui);font-size:var(--fs-s);color:var(--ink-2);display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center}
+.fp-leg i,.fp-clist i{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--fp-c);margin-right:7px;vertical-align:-1px;flex:none}
+/* labels */
+.fp-tag{font-family:var(--font-ui);font-size:var(--fs-xs);font-weight:700;letter-spacing:.04em;border-radius:999px;padding:3px 10px;background:var(--surface-2);color:var(--ink);border:1px solid var(--line-strong);white-space:nowrap;line-height:1.4}
+.fp-tag[data-k="official"]{background:var(--verd-soft);border-color:var(--verd);color:var(--verd-ink)}
+.fp-tag[data-k="analysis"]{background:var(--brass-soft);border-color:var(--brass);color:var(--brass-ink)}
+.fp-tag[data-k="reported"]{background:var(--draft-bg);color:var(--draft-ink);border-color:transparent}
+p .fp-tag{font-size:.78em;padding:1px 8px;vertical-align:1px}
+/* in brief */
+.fp-brief{background:var(--surface-2);border-radius:var(--radius-m);padding:16px 20px;display:grid;gap:8px;border-left:4px solid var(--brass);max-width:var(--fp-measure)}
+.fp-brief h2{font-family:var(--font-ui);font-size:var(--fs-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--brass-ink);font-weight:700;line-height:1.3}
+.fp-brief ul{margin:0;padding-left:1.1em;display:grid;gap:6px;line-height:1.45}
+.fp-brief li::marker{color:var(--brass)}
+/* the inside list: the margin on a wide screen, chips on a phone */
+.fp-inside{font-family:var(--font-ui);font-size:var(--fs-s);display:grid;gap:6px}
+.fp-inside p{font-size:var(--fs-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);font-weight:700}
+.fp-inside ol{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.fp-inside a{color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border:1px solid var(--line-strong);border-radius:999px}
+.fp-inside a:hover{border-color:var(--verd);color:var(--verd-ink)}
+@media (min-width:1100px){
+  .fp-inside{padding:6px 0 6px 14px;border-left:2px solid var(--line)}
+  .fp-inside ol{display:grid;gap:0}
+  .fp-inside ol li{counter-increment:fpi}
+  .fp-inside a{border:0;padding:0;min-height:32px;gap:10px}
+  .fp-inside a::before{content:counter(fpi);font-family:var(--font-head);color:var(--brass-ink);min-width:1ch}
+}
+/* sections and rows */
+.fp-sec{display:grid;gap:14px;padding-top:22px;border-top:1px solid var(--line);min-width:0}
+.fp-sech{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;max-width:var(--fp-measure)}
+.fp-sech h2{font-size:clamp(1.5rem,1.2rem + 1.3vw,2.1rem);line-height:var(--lh-tight);margin-right:4px}
+.fp-row{display:grid;grid-template-columns:minmax(0,1fr);gap:10px var(--fp-gap);align-items:start;min-width:0}
+.fp-row>p{max-width:var(--fp-measure);line-height:var(--lh-body)}
+.fp-row>figure{margin:0;min-width:0}
+.fp-margin{display:grid;gap:10px;min-width:0}
+@media (min-width:1100px){
+  .fp-row{grid-template-columns:minmax(0,var(--fp-measure)) var(--fp-margin);position:relative}
+  .fp-row>*{grid-column:1}
+  .fp-row>.fp-margin{grid-column:2;grid-row:1}
+  /* a note sits beside its paragraph and takes no room of its own (a script keeps notes from overlapping) */
+  .fp-row>.fp-margin:not(.fp-margin-nav){position:absolute;top:0;left:0;right:0}
+  .fp-standrow .fp-stand{align-self:start}
+}
+.fp-drop::first-letter{font-family:var(--font-head);font-size:3.3em;float:left;line-height:.78;padding:.1em .1em 0 0;color:var(--brass-ink)}
+:root[data-face="dyslexia"] .fp-drop::first-letter,:root[data-face="hyperlegible"] .fp-drop::first-letter{float:none;font-size:inherit;padding:0;color:inherit;line-height:inherit;font-family:inherit}
+/* the marks and the notes */
+.fp-ref{all:unset;position:relative;display:inline-flex;align-items:center;justify-content:center;min-width:1.5em;height:1.5em;padding:0 .35em;margin:0 .1em 0 .12em;border-radius:999px;
+  background:var(--brass-soft);color:var(--brass-ink);font-family:var(--font-ui);font-size:.72em;font-weight:700;line-height:1;vertical-align:.4em;cursor:pointer;box-sizing:border-box;border:1px solid transparent}
+.fp-ref::after{content:"";position:absolute;inset:-10px}
+.fp-ref:hover,.fp-ref.is-hot,.fp-ref[aria-expanded="true"]{background:var(--brass);color:var(--on-ink)}
+.fp-ref:focus-visible{outline:var(--focus-w,3px) solid var(--focus);outline-offset:2px}
+:root[data-contrast="high"] .fp-ref{border-color:var(--ink)}
+.fp-note{display:none;gap:5px;font-family:var(--font-ui);font-size:var(--fs-s);line-height:1.45;color:var(--ink-2);background:var(--surface-2);border-radius:var(--radius-s);padding:12px 14px;border-left:3px solid var(--brass)}
+.fp-note.is-open{display:grid}
+.fp-note:focus{outline:none}
+.fp-note:focus-visible{outline:var(--focus-w,3px) solid var(--focus);outline-offset:2px}
+.fp-note-t{color:var(--ink);font-weight:700;line-height:1.3}
+.fp-note-n{font-family:var(--font-head);font-weight:400;color:var(--brass-ink);margin-right:7px;font-size:1.15em}
+.fp-note .nbl{white-space:normal;font-size:var(--fs-s);justify-self:start}
+@media (min-width:1100px){
+  .fp-note{display:grid;background:transparent;border-radius:0;padding:4px 0 6px 14px;border-left:2px solid var(--brass-soft)}
+  .fp-note.is-hot,.fp-note:focus-within{border-left-color:var(--brass)}
+  .fp-note.is-hot .fp-note-t{color:var(--brass-ink)}
+  .fp-margin{position:relative}
+}
+/* the counties strip */
+.fp-csf{display:grid;gap:8px;container-type:inline-size}
+@container (max-width:560px){.fp-cs span.is-mid b{display:none}}
+.fp-cs{display:flex;gap:2px;height:40px;border-radius:7px;overflow:hidden}
+.fp-cs span{display:grid;place-items:center;flex:0 0 auto;height:100%;min-width:3px;background:color-mix(in srgb,var(--fp-c) 60%,var(--bg));font-family:var(--font-ui);font-size:var(--fs-xs);color:var(--ink);overflow:hidden;white-space:nowrap}
+.fp-cs span b{overflow:hidden;text-overflow:ellipsis;padding:0 5px;max-width:100%;font-weight:700}
+.fp-cap{font-family:var(--font-ui);font-size:var(--fs-s);color:var(--ink-2);line-height:1.45}
+.fp-clist{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:2px 24px;font-family:var(--font-ui);font-size:var(--fs-s);font-variant-numeric:tabular-nums}
+.fp-clist li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dotted var(--line-strong);padding:6px 0;min-width:0}
+.fp-clist li span:first-child{display:inline-flex;align-items:center;min-width:0}
+.fp-clist li span:last-child{white-space:nowrap;color:var(--ink-2)}
+/* the forecast against the count */
+.fp-rngf{display:grid;gap:8px}
+.fp-rng{display:grid;gap:8px;padding:8px 0 0}
+.fp-rrow{display:grid;gap:2px}
+.fp-rname{font-family:var(--font-ui);font-size:var(--fs-s);font-weight:700;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.fp-rch{font-weight:400;color:var(--ink-2)}
+.fp-rch::before{content:"\00B7";margin-right:8px;color:var(--line-strong)}
+.fp-track{position:relative;height:48px}
+.fp-grid i{position:absolute;top:14px;bottom:0;border-left:1px dashed var(--line)}
+.fp-b95,.fp-b80{position:absolute;top:22px;height:12px;border-radius:6px}
+.fp-b95{background:color-mix(in srgb,var(--fp-c) 24%,var(--bg))}
+.fp-b80{background:color-mix(in srgb,var(--fp-c) 62%,var(--bg))}
+.fp-md{position:absolute;top:19px;width:2px;height:18px;background:var(--fp-c);transform:translateX(-50%)}
+.fp-act{position:absolute;top:16px;width:3px;height:24px;background:var(--ink);transform:translateX(-50%);border-radius:2px}
+.fp-actl{position:absolute;top:0;transform:translateX(-50%);font-family:var(--font-ui);font-size:var(--fs-xs);font-weight:700;white-space:nowrap;color:var(--ink);background:var(--bg);padding:0 5px;line-height:1.3;border-radius:4px}
+.fp-actl.is-right{transform:translateX(-100%)}
+.fp-actl.is-left{transform:none}
+.fp-axis{position:relative;height:20px;font-family:var(--font-ui);font-size:var(--fs-xs);color:var(--ink-2);margin-top:2px}
+.fp-axis span{position:absolute;transform:translateX(-50%);top:4px;line-height:1}
+.fp-axis span::before{content:"";position:absolute;left:50%;top:-6px;height:5px;border-left:1px solid var(--line-strong)}
+.fp-axis span.is-first{transform:none}.fp-axis span.is-first::before{left:0}
+.fp-axis span.is-last{transform:translateX(-100%)}.fp-axis span.is-last::before{left:auto;right:0}
+.fp-rleg{font-family:var(--font-ui);font-size:var(--fs-xs);color:var(--ink-2);display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center}
+.fp-rleg i{display:inline-block;width:16px;height:9px;border-radius:5px;margin-right:6px;vertical-align:-1px}
+.fp-rleg .k95{background:color-mix(in srgb,var(--ink) 20%,var(--bg))}
+.fp-rleg .k80{background:color-mix(in srgb,var(--ink) 55%,var(--bg))}
+.fp-rleg .kmd{width:2px;height:12px;border-radius:0;background:var(--ink-2);vertical-align:-2px}
+.fp-rleg .kact{width:3px;height:14px;border-radius:2px;background:var(--ink);vertical-align:-3px}
+/* run by run */
+.fp-runf{display:grid;gap:6px}
+.fp-run{position:relative;padding-left:40px}
+.fp-run svg{display:block;width:100%;height:170px}
+.fp-ylab span{position:absolute;left:0;transform:translateY(-50%);font-family:var(--font-ui);font-size:var(--fs-xs);color:var(--ink-2);line-height:1}
+.fp-rg{stroke:var(--line);stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:3 4}
+.fp-rb{fill:var(--fp-c);opacity:.2}
+.fp-rl{fill:none;stroke:var(--fp-c);stroke-width:2.5;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.fp-rt{stroke:var(--fp-c);stroke-width:2;vector-effect:non-scaling-stroke}
+.fp-runx{display:flex;justify-content:space-between;gap:10px;font-family:var(--font-ui);font-size:var(--fs-xs);color:var(--ink-2);padding-left:40px}
+.fp-env{margin:0;padding:12px 0 12px 18px;border-left:3px solid var(--brass-soft);display:grid;gap:6px;max-width:var(--fp-measure);color:var(--ink-2);line-height:1.5}
+.fp-envk{font-family:var(--font-ui);font-size:var(--fs-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--brass-ink);font-weight:700}
+/* headlines */
+.fp-heads{margin:0;padding:0;list-style:none;display:grid;gap:2px;max-width:var(--fp-measure)}
+.fp-heads li{display:grid;gap:2px;padding:9px 0;border-bottom:1px dotted var(--line-strong)}
+.fp-heads a{font-family:var(--font-head);font-size:var(--fs-l);line-height:var(--lh-tight);color:var(--ink);text-decoration-color:var(--line-strong)}
+.fp-heads a:hover{color:var(--verd-ink)}
+.fp-heads span{font-family:var(--font-ui);font-size:var(--fs-xs);color:var(--ink-2);letter-spacing:.04em}
+/* go deeper */
+.fp-deep{display:grid;gap:12px;border-top:4px double var(--ink);padding-top:18px;max-width:var(--fp-measure)}
+.fp-deepk{font-family:var(--font-ui);font-size:var(--fs-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--brass-ink);font-weight:700}
+.fp-deepl{display:flex;flex-wrap:wrap;gap:8px}
+.fp-btn{font-family:var(--font-ui);font-size:var(--fs-s);font-weight:700;min-height:var(--hit);display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:12px;background:var(--verd);color:var(--on-ink);text-decoration:none;border:1px solid var(--verd)}
+.fp-btn.nbl{text-decoration:none;white-space:normal;color:var(--on-ink)}
+.fp-btn .nbl-i{opacity:1}
+.fp-btn.is-quiet{background:var(--surface);color:var(--ink);border-color:var(--line-strong)}
+.fp-btn:hover{filter:brightness(1.06)}
+.fp-fine{font-family:var(--font-ui);font-size:var(--fs-xs);color:var(--ink-2);line-height:1.5}
+/* reading length */
+.fp[data-fp-len="1"] [data-fp-min="2"],.fp[data-fp-len="1"] [data-fp-min="3"],.fp[data-fp-len="2"] [data-fp-min="3"]{display:none}
+.fp-readon{display:flex;padding-top:4px}
+.fp[data-fp-len="3"] .fp-readon{display:none}
+.fp-more{cursor:pointer}
+.fp-more::after{content:"\2193";font-weight:400}
+.fp-row.is-back{outline:2px solid var(--brass);outline-offset:8px;border-radius:4px}
+/* motion, only when the reader allows it */
+html[data-motion="full"]:not([data-calm="on"]) .fp-bar.is-anim::after{animation:fpWipe 1.15s var(--ease,ease) both}
+@keyframes fpWipe{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+html[data-motion="full"]:not([data-calm="on"]) .fp [data-fp-min]{animation:fpIn var(--dur-3,.3s) var(--ease,ease) both}
+@keyframes fpIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+html[data-motion="full"]:not([data-calm="on"]) .fp-note,html[data-motion="full"]:not([data-calm="on"]) .fp-ref{transition:background-color var(--dur-2,.2s),border-color var(--dur-2,.2s),color var(--dur-2,.2s)}
+html[data-motion="full"]:not([data-calm="on"]) .fp-prog i{transition:transform var(--dur-1,.12s) linear}
+@media (prefers-reduced-motion: reduce){.fp *{animation:none!important;transition:none!important}}
+@media print{.fp-prog,.fp-lenbox,.sbx-switch,.sbx-note,.fp-deep,.fp-kick{display:none!important}.fp [data-fp-min]{display:revert!important}.fp-note{display:grid!important}.fp-ref{background:none;color:var(--brass-ink)}}
+</style>
+<div class="fp-prog" aria-hidden="true"><i></i></div>
+<div class="fp-top">
+<p class="fp-kick">Sandbox example &middot; layout one of four</p>
+<nav class="sbx-switch" aria-label="Layout examples"><a href="../">All four</a><a href="../front/" aria-current="page">The Front Page</a><a href="../cards/">One card at a time</a><a href="../split/">Workbench with a notes pane</a><a href="../timeline/">The story so far</a><a href="../notebook/">The notebook</a></nav>
+<div class="fp-mast">
+<div><p class="fp-plate">The Front Page</p>
+<p class="fp-date"><b>North Carolina</b><span>U.S. Senate, 2026</span><span>Count as reported November 11, 5:14 p.m. ET</span></p></div>
+<div class="fp-lenbox">
+<fieldset class="fp-len"><legend>How much to read</legend>
+<label><input type="radio" name="fp-len" value="1"><span>The gist<small data-w="1"></small></span></label>
+<label><input type="radio" name="fp-len" value="2"><span>The story<small data-w="2"></small></span></label>
+<label><input type="radio" name="fp-len" value="3"><span>Everything<small data-w="3"></small></span></label>
+</fieldset>
+<p class="fp-lenhint" aria-live="polite"></p>
+</div></div></div>
+<article class="fp-art" id="top" aria-labelledby="fp-h1">
+<header class="fp-head">
+<h1 class="fp-h1" id="fp-h1">Cooper leads by 19.7 points with every precinct reporting</h1>
+<div class="fp-row fp-standrow" id="r21"><p class="fp-stand">As reported by the North Carolina State Board of Elections: Roy Cooper, the Democratic candidate, has 2,481,017 votes (58.8%) to Michael Whatley&rsquo;s 1,648,945 (39.0%), a gap of 832,072 votes. NBC News and The Associated Press called the race for Cooper on November 3. The count is not final until the state certifies it.</p><div class="fp-margin fp-margin-nav" data-fp-min="2"><nav class="fp-inside" aria-label="Inside this edition"><p>Inside</p><ol>
+<li><a href="#count">The count</a></li><li><a href="#counties">Where the votes came from</a></li>
+<li><a href="#forecast">What the forecast said</a></li><li><a href="#calls">Who called it</a></li>
+<li><a href="#final">Before it is final</a></li></ol></nav></div></div>
+<p class="fp-by" data-fp-min="2"><span>From the record:</span><span>the count, the North Carolina State Board of Elections</span><span>the forecast, the site&rsquo;s own model (Analysis)</span><span>the calls and statements, the race&rsquo;s Coverage file (links only)</span></p>
+</header>
+<figure class="fp-lead" aria-labelledby="lead-cap">
+<div class="fp-tally">
+<div class="fp-cand" style="--fp-c:var(--fp-dem)">
+<p class="fp-cn"><span class="fp-sw" aria-hidden="true"></span>Roy Cooper</p><p class="fp-cp">Democratic</p>
+<p class="fp-big"><span class="fp-num" data-v="58.75" data-f="p">58.8%</span></p>
+<p class="fp-votes"><span class="fp-num" data-v="2481017" data-f="i">2,481,017</span> votes</p></div>
+<div class="fp-gapb"><p class="fp-gapn"><span class="fp-num" data-v="19.70" data-f="d">19.7</span></p>
+<p class="fp-gapl">points apart</p><p class="fp-gapv">832,072 votes</p></div>
+<div class="fp-cand is-second" style="--fp-c:var(--fp-rep)">
+<p class="fp-cn"><span class="fp-sw" aria-hidden="true"></span>Michael Whatley</p><p class="fp-cp">Republican</p>
+<p class="fp-big"><span class="fp-num" data-v="39.05" data-f="p">39.0%</span></p>
+<p class="fp-votes"><span class="fp-num" data-v="1648945" data-f="i">1,648,945</span> votes</p></div>
+</div>
+<div class="fp-bar" role="img" aria-label="Share of the vote: Roy Cooper 58.8%, Michael Whatley 39.0%, Shannon W. Bray 1.3%, Michael Dublin 0.9%"><span style="flex-basis:58.75%;--fp-c:var(--fp-dem)"></span><span style="flex-basis:39.05%;--fp-c:var(--fp-rep)"></span><span style="flex-basis:1.33%;--fp-c:var(--fp-oth)"></span><span style="flex-basis:0.87%;--fp-c:var(--fp-oth2)"></span></div>
+<figcaption id="lead-cap" class="fp-leg"><span><i style="--fp-c:var(--fp-oth)" aria-hidden="true"></i>Shannon W. Bray, Libertarian: 56,091 votes (1.3%)</span><span><i style="--fp-c:var(--fp-oth2)" aria-hidden="true"></i>Michael Dublin, Green: 36,716 votes (0.9%)</span><span>2,626 of 2,626 precincts reporting</span>
+<span>4,222,769 votes in all</span><span class="fp-tag" data-k="reported">As reported, not final</span></figcaption>
+</figure>
+<aside class="fp-brief" aria-labelledby="brief-h">
+<h2 id="brief-h">In brief</h2><ul>
+<li>Cooper leads Whatley 58.8% to 39.0%
+with every precinct reporting.</li>
+<li>NBC News and The Associated Press called the race for Cooper on November 3. The Civic Archive does not call races.</li>
+<li>The forecast gave Cooper more than 99 in 100; his share came in above even the wider range: a miss. Not final until North Carolina certifies the count.</li>
+</ul></aside>
+<section class="fp-sec" id="count" data-fp-min="2" aria-labelledby="count-h">
+<header class="fp-sech"><h2 id="count-h">The count</h2><span class="fp-tag" data-k="official">Official count</span><span class="fp-tag" data-k="reported">As reported, not final</span></header>
+<div class="fp-row" id="r1"><p class="fp-drop">With 2,626 of 2,626 precincts reporting, Roy Cooper, the Democratic candidate, has
+2,481,017 votes: 58.8% of the 4,222,769 cast in this race. Michael Whatley, the Republican
+candidate, has 1,648,945, or 39.0%. The gap between them is 832,072 votes, 19.7 points of the vote.<button type="button" class="fp-ref" id="m1" aria-controls="n1" aria-describedby="n1-t"><span class="tca-sr">Note </span>1</button></p><div class="fp-margin"><aside class="fp-note" id="n1" tabindex="-1" aria-labelledby="n1-t"><p class="fp-note-t" id="n1-t"><span class="fp-note-n" aria-hidden="true">1</span>The count: North Carolina&rsquo;s U.S. Senate race</p><p class="fp-note-l">As reported by the North Carolina State Board of Elections: Roy Cooper 2,481,017 votes (58.8%), Michael Whatley 1,648,945 (39.0%), with 2,626 of 2,626 precincts reporting.</p><a class="nbl" href="../notebook/#night/nc/senate/count&from=front~r1" data-nb="night/nc/senate/count"><span class="nbl-i" aria-hidden="true"></span>Open in the notebook</a></aside></div></div>
+<div class="fp-row" id="r2"><p>Four names were printed on the ballot for this seat. The other two: Shannon W. Bray, Libertarian, 56,091 (1.3%); Michael Dublin, Green, 36,716 (0.9%).<button type="button" class="fp-ref" id="m2" aria-controls="n2" aria-describedby="n2-t"><span class="tca-sr">Note </span>2</button></p><div class="fp-margin"><aside class="fp-note" id="n2" tabindex="-1" aria-labelledby="n2-t"><p class="fp-note-t" id="n2-t"><span class="fp-note-n" aria-hidden="true">2</span>Who was on the ballot</p><p class="fp-note-l">4 candidates were printed on North Carolina&rsquo;s November ballot for the U.S. Senate.</p><a class="nbl" href="../notebook/#ballot/congress/nc/senate/list&from=front~r2" data-nb="ballot/congress/nc/senate/list"><span class="nbl-i" aria-hidden="true"></span>Open in the notebook</a></aside></div></div>
+<div class="fp-row" id="r3" data-fp-min="3"><p>The Board&rsquo;s county figures in the same reading add up to 4,222,375 votes, 394 fewer than its statewide total; the site shows each as the Board posts it and adjusts neither. Until the State Board of Elections certifies the result, every figure on this page can still change.</p></div>
+</section>
+<section class="fp-sec" id="counties" data-fp-min="2" aria-labelledby="counties-h">
+<header class="fp-sech"><h2 id="counties-h">Where the votes came from</h2><span class="fp-tag" data-k="official">Official count</span><span class="fp-tag" data-k="reported">As reported, not final</span></header>
+<div class="fp-row" id="r4"><p>100 counties reported. The candidate with the most votes in a county: Whatley in 56; Cooper in 44. A map of counties and the
+statewide count can look different because counties differ so much in size: the 8 counties with the most votes cast
+1,826,418 of the state&rsquo;s 4,222,769 votes, 43.3%, and Cooper had the most votes in
+7 of those 8.<button type="button" class="fp-ref" id="m3" aria-controls="n3" aria-describedby="n3-t"><span class="tca-sr">Note </span>3</button></p><div class="fp-margin"><aside class="fp-note" id="n3" tabindex="-1" aria-labelledby="n3-t"><p class="fp-note-t" id="n3-t"><span class="fp-note-n" aria-hidden="true">3</span>County by county</p><p class="fp-note-l">100 counties reported. Counties where each candidate had the most votes: Michael Whatley 56; Roy Cooper 44.</p><a class="nbl" href="../notebook/#night/nc/senate/counties&from=front~r4" data-nb="night/nc/senate/counties"><span class="nbl-i" aria-hidden="true"></span>Open in the notebook</a></aside></div></div>
+<div class="fp-row" id="r5"><figure class="fp-csf"><div class="fp-cs" role="img" aria-label="The 8 counties with the most votes, each sized by its votes and coloured by the candidate with the most there: Wake County 525,087, Cooper 72.7%; Mecklenburg County 441,717, Cooper 75.8%; Guilford County 217,996, Cooper 70.1%; Forsyth County 153,806, Cooper 66.7%; Durham County 151,654, Cooper 87.1%; Buncombe County 131,752, Cooper 71.9%; New Hanover County 103,376, Cooper 60.0%; Union County 101,030, Whatley 50.3%"><span style="flex-basis:28.75%;--fp-c:var(--fp-dem)"><b>Wake</b></span><span style="flex-basis:24.18%;--fp-c:var(--fp-dem)"><b>Mecklenburg</b></span><span class="is-mid" style="flex-basis:11.94%;--fp-c:var(--fp-dem)"><b>Guilford</b></span><span style="flex-basis:8.42%;--fp-c:var(--fp-dem)"></span><span style="flex-basis:8.30%;--fp-c:var(--fp-dem)"></span><span style="flex-basis:7.21%;--fp-c:var(--fp-dem)"></span><span style="flex-basis:5.66%;--fp-c:var(--fp-dem)"></span><span style="flex-basis:5.53%;--fp-c:var(--fp-rep)"></span></div>
+<figcaption class="fp-cap">The 8 counties with the most votes, each as wide as its share of their votes and shaded by the candidate
+with the most votes there. Every vote counts the same in a statewide race; the biggest counties are shown because that is where most of the votes are.</figcaption></figure></div>
+<div class="fp-row" id="r6"><p>The three biggest: Wake County (525,087 votes; Cooper 72.7%); Mecklenburg County (441,717 votes; Cooper 75.8%); Guilford County (217,996 votes; Cooper 70.1%).</p></div>
+<div class="fp-row" id="r7" data-fp-min="3"><ul class="fp-clist" aria-label="The 8 counties with the most votes: votes cast, and the share of the candidate with the most"><li><span><i style="--fp-c:var(--fp-dem)" aria-hidden="true"></i>Wake County</span><span>525,087 &middot; Cooper 72.7%</span></li><li><span><i style="--fp-c:var(--fp-dem)" aria-hidden="true"></i>Mecklenburg County</span><span>441,717 &middot; Cooper 75.8%</span></li><li><span><i style="--fp-c:var(--fp-dem)" aria-hidden="true"></i>Guilford County</span><span>217,996 &middot; Cooper 70.1%</span></li><li><span><i style="--fp-c:var(--fp-dem)" aria-hidden="true"></i>Forsyth County</span><span>153,806 &middot; Cooper 66.7%</span></li><li><span><i style="--fp-c:var(--fp-dem)" aria-hidden="true"></i>Durham County</span><span>151,654 &middot; Cooper 87.1%</span></li><li><span><i style="--fp-c:var(--fp-dem)" aria-hidden="true"></i>Buncombe County</span><span>131,752 &middot; Cooper 71.9%</span></li><li><span><i style="--fp-c:var(--fp-dem)" aria-hidden="true"></i>New Hanover County</span><span>103,376 &middot; Cooper 60.0%</span></li><li><span><i style="--fp-c:var(--fp-rep)" aria-hidden="true"></i>Union County</span><span>101,030 &middot; Whatley 50.3%</span></li></ul></div>
+<div class="fp-row" id="r8" data-fp-min="3"><p>Which counties a candidate led says nothing about the margin: the statewide count decides. How many fewer votes the
+races below this one drew in each county, and which counties chose different parties for different races, are worked out on
+Election Night&rsquo;s page from the same county figures.<button type="button" class="fp-ref" id="m4" aria-controls="n4" aria-describedby="n4-t"><span class="tca-sr">Note </span>4</button></p><div class="fp-margin"><aside class="fp-note" id="n4" tabindex="-1" aria-labelledby="n4-t"><p class="fp-note-t" id="n4-t"><span class="fp-note-n" aria-hidden="true">4</span>Votes left blank and split results</p><p class="fp-note-l">How many fewer votes this race had than the top race in each county, and the counties that chose different parties for different races. Worked out on Election Night&rsquo;s page from the same county figures.</p><a class="nbl" href="../notebook/#night/nc/senate/splits&from=front~r8" data-nb="night/nc/senate/splits"><span class="nbl-i" aria-hidden="true"></span>Open in the notebook</a></aside></div></div>
+</section>
+<section class="fp-sec" id="forecast" data-fp-min="2" aria-labelledby="fc-h">
+<header class="fp-sech"><h2 id="fc-h">What the forecast said</h2><span class="fp-tag" data-k="analysis">Analysis</span></header>
+<div class="fp-row" id="r9"><p>The site&rsquo;s model ran for the last time before Election Day on November 1, 2026. It gave Roy Cooper a chance of
+more than 99 in 100 and Michael Whatley less than 1 in 100. It put Cooper&rsquo;s likely share
+of the vote between 49.1% and 56.4%, and in 95 of every 100 of its 2,000 simulated elections
+between 46.9% and 57.9%.<button type="button" class="fp-ref" id="m5" aria-controls="n5" aria-describedby="n5-t"><span class="tca-sr">Note </span>5</button></p><div class="fp-margin"><aside class="fp-note" id="n5" tabindex="-1" aria-labelledby="n5-t"><p class="fp-note-t" id="n5-t"><span class="fp-note-n" aria-hidden="true">5</span>The forecast, worked out</p><p class="fp-note-l">The model&rsquo;s last run before Election Day gave Roy Cooper more than 99 in 100 chance, likely 49.1% to 56.4% of the vote. The count has Roy Cooper at 58.8%: above that range.</p><a class="nbl" href="../notebook/#ballot/congress/nc/senate/forecast&from=front~r9" data-nb="ballot/congress/nc/senate/forecast"><span class="nbl-i" aria-hidden="true"></span>Open in the notebook</a></aside></div></div>
+<div class="fp-row" id="r10"><figure class="fp-rngf"><div class="fp-rng" role="img" aria-label="The forecast against the count. Roy Cooper: likely 49.1% to 56.4%, wider range 46.9% to 57.9%, middle 53.1%, the count 58.8%; Michael Whatley: likely 39.2% to 45.8%, wider range 37.0% to 47.4%, middle 42.6%, the count 39.0%"><div class="fp-rrow" style="--fp-c:var(--fp-dem)"><p class="fp-rname"><span class="fp-sw" aria-hidden="true"></span>Roy Cooper<span class="fp-rch">more than 99 in 100</span></p><div class="fp-track"><div class="fp-grid" aria-hidden="true"><i style="left:0.00%"></i><i style="left:20.00%"></i><i style="left:40.00%"></i><i style="left:60.00%"></i><i style="left:80.00%"></i><i style="left:100.00%"></i></div><i class="fp-b95" style="left:47.48%;width:44.16%"></i><i class="fp-b80" style="left:56.44%;width:29.12%"></i><i class="fp-md" style="left:72.44%"></i><i class="fp-act" style="left:95.00%"></i><span class="fp-actl is-right" style="left:95.00%">Count 58.8%</span></div></div><div class="fp-rrow" style="--fp-c:var(--fp-rep)"><p class="fp-rname"><span class="fp-sw" aria-hidden="true"></span>Michael Whatley<span class="fp-rch">less than 1 in 100</span></p><div class="fp-track"><div class="fp-grid" aria-hidden="true"><i style="left:0.00%"></i><i style="left:20.00%"></i><i style="left:40.00%"></i><i style="left:60.00%"></i><i style="left:80.00%"></i><i style="left:100.00%"></i></div><i class="fp-b95" style="left:8.12%;width:41.28%"></i><i class="fp-b80" style="left:16.96%;width:26.36%"></i><i class="fp-md" style="left:30.28%"></i><i class="fp-act" style="left:16.20%"></i><span class="fp-actl" style="left:16.20%">Count 39.0%</span></div></div>
+<div class="fp-axis" aria-hidden="true"><span class="is-first" style="left:0.00%">35%</span><span class="" style="left:20.00%">40%</span><span class="" style="left:40.00%">45%</span><span class="" style="left:60.00%">50%</span><span class="" style="left:80.00%">55%</span><span class="is-last" style="left:100.00%">60%</span></div></div>
+<p class="fp-rleg"><span><i class="k95"></i>95 in 100 runs</span><span><i class="k80"></i>80 in 100 (likely)</span><span><i class="kmd"></i>the middle estimate</span><span><i class="kact"></i>the count</span></p>
+<figcaption class="fp-cap">Each candidate&rsquo;s share of the vote, as the model&rsquo;s last run saw it, with the count laid over it.</figcaption></figure></div>
+<div class="fp-row" id="r11"><p>The count has Cooper at 58.8%: above even the wider range: a miss. Whatley is at 39.0%:
+inside the wider range, below the likely one. The model had Cooper as the favourite; on his share it was off by 5.6 points.
+A miss is not explained away: it goes into the model&rsquo;s track record, which is shown wherever a forecast is.<button type="button" class="fp-ref" id="m6" aria-controls="n6" aria-describedby="n6-t"><span class="tca-sr">Note </span>6</button></p><div class="fp-margin"><aside class="fp-note" id="n6" tabindex="-1" aria-labelledby="n6-t"><p class="fp-note-t" id="n6-t"><span class="fp-note-n" aria-hidden="true">6</span>The forecast&rsquo;s track record</p><p class="fp-note-l">Tested on the U.S. Senate races of 2022 and 2024 (64 races): the favourite won 62; the actual Democratic share fell inside the 80-in-100 range in 58 and inside the 95-in-100 range in 63; vote shares were off by 3.9 points on average.</p><a class="nbl" href="../notebook/#forecasts/track&from=front~r11" data-nb="forecasts/track"><span class="nbl-i" aria-hidden="true"></span>Open in the notebook</a></aside></div></div>
+<div class="fp-row" id="r12" data-fp-min="3"><p>That record so far: tested on the 64 U.S. Senate races of 2022 and 2024, the favourite won 62;
+the actual share fell inside the likely range in 58 and inside the wider range in 63; shares were off by
+3.9 points on average.<button type="button" class="fp-ref" id="m7" aria-controls="n7" aria-describedby="n7-t"><span class="tca-sr">Note </span>7</button></p><div class="fp-margin"><aside class="fp-note" id="n7" tabindex="-1" aria-labelledby="n7-t"><p class="fp-note-t" id="n7-t"><span class="fp-note-n" aria-hidden="true">7</span>How the forecast works</p><p class="fp-note-l">A computer model&rsquo;s estimate from past election results and polls by members of AAPOR&rsquo;s Transparency Initiative.</p><a class="nbl" href="../notebook/#forecasts/how&from=front~r12" data-nb="forecasts/how"><span class="nbl-i" aria-hidden="true"></span>Open in the notebook</a></aside></div></div>
+<div class="fp-row" id="r13" data-fp-min="3"><figure class="fp-runf"><div class="fp-run"><div class="fp-ylab" aria-hidden="true"><span style="top:100.00%">35%</span><span style="top:80.00%">40%</span><span style="top:60.00%">45%</span><span style="top:40.00%">50%</span><span style="top:20.00%">55%</span><span style="top:0.00%">60%</span></div>
+<svg viewBox="0 0 640 180" preserveAspectRatio="none" role="img" aria-label="Roy Cooper&#x27;s middle estimate moved from 51.7% on October 10, 2026 to 53.1% on November 1, 2026, across 6 runs; Michael Whatley&#x27;s from 43.9% to 42.6%."><line class="fp-rg" x1="0" x2="640" y1="170.0" y2="170.0"/><line class="fp-rg" x1="0" x2="640" y1="138.0" y2="138.0"/><line class="fp-rg" x1="0" x2="640" y1="106.0" y2="106.0"/><line class="fp-rg" x1="0" x2="640" y1="74.0" y2="74.0"/><line class="fp-rg" x1="0" x2="640" y1="42.0" y2="42.0"/><line class="fp-rg" x1="0" x2="640" y1="10.0" y2="10.0"/><g style="--fp-c:var(--fp-dem)"><polygon class="fp-rb" points="20.0,88.7 140.0,82.1 260.0,84.5 380.0,83.3 500.0,80.1 620.0,79.7 620.0,33.1 500.0,32.4 380.0,35.8 260.0,36.6 140.0,36.6 20.0,40.4"/><polyline class="fp-rl" points="20.0,63.0 140.0,58.3 260.0,59.2 380.0,58.5 500.0,54.1 620.0,54.1"/><line class="fp-rt" x1="20.0" x2="20.0" y1="58.0" y2="68.0"/><line class="fp-rt" x1="140.0" x2="140.0" y1="53.3" y2="63.3"/><line class="fp-rt" x1="260.0" x2="260.0" y1="54.2" y2="64.2"/><line class="fp-rt" x1="380.0" x2="380.0" y1="53.5" y2="63.5"/><line class="fp-rt" x1="500.0" x2="500.0" y1="49.1" y2="59.1"/><line class="fp-rt" x1="620.0" x2="620.0" y1="49.1" y2="59.1"/></g><g style="--fp-c:var(--fp-rep)"><polygon class="fp-rb" points="20.0,137.5 140.0,139.6 260.0,140.2 380.0,139.7 500.0,144.5 620.0,142.9 620.0,100.7 500.0,101.1 380.0,97.2 260.0,96.2 140.0,96.8 20.0,90.5"/><polyline class="fp-rl" points="20.0,113.2 140.0,117.3 260.0,117.2 380.0,117.3 500.0,121.4 620.0,121.6"/><line class="fp-rt" x1="20.0" x2="20.0" y1="108.2" y2="118.2"/><line class="fp-rt" x1="140.0" x2="140.0" y1="112.3" y2="122.3"/><line class="fp-rt" x1="260.0" x2="260.0" y1="112.2" y2="122.2"/><line class="fp-rt" x1="380.0" x2="380.0" y1="112.3" y2="122.3"/><line class="fp-rt" x1="500.0" x2="500.0" y1="116.4" y2="126.4"/><line class="fp-rt" x1="620.0" x2="620.0" y1="116.6" y2="126.6"/></g></svg></div>
+<p class="fp-runx" aria-hidden="true"><span>October 10, 2026</span><span>6 runs</span><span>November 1, 2026</span></p>
+<figcaption class="fp-cap">How the estimate moved, run by run: the line is each candidate&rsquo;s middle estimate, the band the range that held 80 in 100 runs.</figcaption></figure></div>
+<div class="fp-row" id="r14" data-fp-min="3"><blockquote class="fp-env"><p class="fp-envk">In the model&rsquo;s own words</p><p>In 10 other states, U.S. Senate polls by members of AAPOR&#x27;s Transparency Initiative have Democrats running 3.2 points ahead of Kamala Harris&#x27;s 2024 share of the two-party vote. Applied to North Carolina&#x27;s 2024 presidential result (48.4% Democratic of the two-party vote) and moved a little by North Carolina&#x27;s own member polls, a generic 2026 contest in North Carolina stands near 53.4% Democratic, give or take about 3.6 points.</p></blockquote></div>
+</section>
+<section class="fp-sec" id="calls" data-fp-min="2" aria-labelledby="calls-h">
+<header class="fp-sech"><h2 id="calls-h">Who called it, and what the candidates said</h2><span class="fp-tag" data-k="links">Links only</span></header>
+<div class="fp-row" id="r15"><p><strong>NBC News</strong> called it for Cooper at 8:23 p.m. ET on November 3 (<a href="https://www.nbcnews.com/politics/2026-election/roy-cooper-north-carolina-senate-election-win-democrats-rcna603330" rel="noopener" target="_blank">the report</a>); <strong>The Associated Press</strong> called it for Cooper at 8:30 p.m. ET on November 3 (<a href="https://www.wect.com/2026/11/04/cooper-beats-trump-backed-whatley-north-carolina-senate-race/" rel="noopener" target="_blank">the report</a>). A call is a news organization&rsquo;s judgment,
+made before every ballot is counted. The Civic Archive does not call races; it shows the count, and the calls as links.<button type="button" class="fp-ref" id="m8" aria-controls="n8" aria-describedby="n8-t"><span class="tca-sr">Note </span>8</button></p><div class="fp-margin"><aside class="fp-note" id="n8" tabindex="-1" aria-labelledby="n8-t"><p class="fp-note-t" id="n8-t"><span class="fp-note-n" aria-hidden="true">8</span>Why this site never calls a race</p><p class="fp-note-l">News organizations call races; states decide them. This site shows the count, and the calls as links.</p><a class="nbl" href="../notebook/#method/calls&from=front~r15" data-nb="method/calls"><span class="nbl-i" aria-hidden="true"></span>Open in the notebook</a></aside></div></div>
+<div class="fp-row" id="r16"><p><strong>Roy Cooper</strong> declared victory (<a href="https://www.youtube.com/watch?v=D6NXbOvnHXA" rel="noopener" target="_blank">CNBC Television (YouTube)</a>, video, November 3, 2026; <a href="https://www.nbcnews.com/video/full-speech-roy-cooper-projected-winner-in-north-carolina-senate-race-272813637748" rel="noopener" target="_blank">NBC News</a>, video, November 3, 2026). <strong>Michael Whatley</strong> conceded (<a href="https://www.wunc.org/2026-11-03/whatley-concedes-to-cooper-in-u-s-senate-race-north-carolina-is-a-state-worth-fighting-for" rel="noopener" target="_blank">WUNC</a>, text, November 3, 2026; <a href="https://www.youtube.com/watch?v=e2NEAwXS94k" rel="noopener" target="_blank">ABC11 (YouTube)</a>, video, November 4, 2026). Their words are their own:
+nothing is copied here, and the links go to their statements and the reports that carried them.<button type="button" class="fp-ref" id="m9" aria-controls="n9" aria-describedby="n9-t"><span class="tca-sr">Note </span>9</button></p><div class="fp-margin"><aside class="fp-note" id="n9" tabindex="-1" aria-labelledby="n9-t"><p class="fp-note-t" id="n9-t"><span class="fp-note-n" aria-hidden="true">9</span>Coverage: who called it, and what the candidates said</p><p class="fp-note-l">2 news organizations called the race; 2 candidates made statements after it; 17 news stories are linked.</p><a class="nbl" href="../notebook/#ballot/congress/nc/senate/coverage&from=front~r16" data-nb="ballot/congress/nc/senate/coverage"><span class="nbl-i" aria-hidden="true"></span>Open in the notebook</a></aside></div></div>
+<div class="fp-row" id="r17" data-fp-min="3"><p>17 news stories are linked on the race&rsquo;s Coverage tab: 13 national, 2 from state outlets, 2 local. A few of their headlines, in the outlets&rsquo; own words:</p></div>
+<div class="fp-row" id="r18" data-fp-min="3"><ul class="fp-heads"><li><a href="https://www.aljazeera.com/news/2026/11/4/democrat-roy-cooper-flips-north-carolina-us-senate-seat" rel="noopener" target="_blank">Democrat Roy Cooper flips North Carolina US Senate seat</a><span>Al Jazeera, November 4, 2026</span></li><li><a href="https://www.nbcnews.com/politics/2026-elections/north-carolina-senate-results" rel="noopener" target="_blank">North Carolina U.S. Senate Election 2026 Live Results: Roy Cooper Wins</a><span>NBC News Politics, November 3, 2026</span></li><li><a href="https://www.theguardian.com/global/video/2026/nov/03/north-carolina-elects-roy-cooper-to-be-states-first-democratic-senator-in-10-years-video" rel="noopener" target="_blank">North Carolina elects Roy Cooper to be state&#x27;s first Democratic senator in 10 years …</a><span>The Guardian US Politics, November 3, 2026</span></li><li><a href="https://www.wunc.org/politics/2026-11-03/democrat-roy-cooper-wins-u-s-senate-race" rel="noopener" target="_blank">Democrat Roy Cooper wins U.S. Senate race</a><span>WUNC, November 3, 2026</span></li><li><a href="https://ncnewsline.com/2026/11/03/cooper-becomes-first-democrat-to-win-us-senate-race-in-nc-since-2008/" rel="noopener" target="_blank">Cooper becomes first Democrat to win US Senate race in NC since 2008</a><span>NC Newsline, November 3, 2026</span></li><li><a href="https://www.wsoctv.com/news/local/roy-cooper-wins-us-senate-race-north-carolina-after-contentious-campaign/QPMEL3RGQRB5ZL26CEOEDGR3MA/" rel="noopener" target="_blank">Roy Cooper wins U.S. Senate race in North Carolina after contentious campaign</a><span>WSOC-TV, November 3, 2026</span></li><li><a href="https://www.wect.com/2026/11/04/cooper-beats-trump-backed-whatley-north-carolina-senate-race/" rel="noopener" target="_blank">Democrat Roy Cooper wins North Carolina Senate seat, flipping a key GOP-held seat</a><span>WECT (The Associated Press), November 3, 2026</span></li></ul></div>
+</section>
+<section class="fp-sec" id="final" data-fp-min="2" aria-labelledby="final-h">
+<header class="fp-sech"><h2 id="final-h">Before it is final</h2><span class="fp-tag" data-k="how">How it works</span></header>
+<div class="fp-row" id="r19"><p>Election night figures are a first count. Counties still check every ballot and add the ones that could not be counted on
+the night (the canvass); then the State Board of Elections certifies the statewide result, and only then does this site mark a
+figure &ldquo;as certified&rdquo;. A close race can be recounted under state law. A concession is a custom, not a legal step: it ends
+no count.<button type="button" class="fp-ref" id="m10" aria-controls="n10" aria-describedby="n10-t"><span class="tca-sr">Note </span>10</button></p><div class="fp-margin"><aside class="fp-note" id="n10" tabindex="-1" aria-labelledby="n10-t"><p class="fp-note-t" id="n10-t"><span class="fp-note-n" aria-hidden="true">10</span>When the count becomes final</p><p class="fp-note-l">Election night figures are a first count. The result is final when the state certifies it.</p><a class="nbl" href="../notebook/#night/nc/senate/final&from=front~r19" data-nb="night/nc/senate/final"><span class="nbl-i" aria-hidden="true"></span>Open in the notebook</a></aside></div></div>
+<div class="fp-row" id="r20" data-fp-min="3"><p>Every figure on this page carries a label saying what kind of fact it is. <span class="fp-tag" data-k="official">Official count</span>
+is the Board&rsquo;s own figure, <span class="fp-tag" data-k="reported">As reported, not final</span> until certified;
+<span class="fp-tag" data-k="analysis">Analysis</span> is worked out by this site from official figures, with the working shown;
+<span class="fp-tag" data-k="links">Links only</span> is other people&rsquo;s words, linked and never copied.<button type="button" class="fp-ref" id="m11" aria-controls="n11" aria-describedby="n11-t"><span class="tca-sr">Note </span>11</button><button type="button" class="fp-ref" id="m12" aria-controls="n12" aria-describedby="n12-t"><span class="tca-sr">Note </span>12</button></p><div class="fp-margin"><aside class="fp-note" id="n11" tabindex="-1" aria-labelledby="n11-t"><p class="fp-note-t" id="n11-t"><span class="fp-note-n" aria-hidden="true">11</span>What the labels mean</p><p class="fp-note-l">Every figure carries a label saying what kind of fact it is.</p><a class="nbl" href="../notebook/#method/labels&from=front~r20" data-nb="method/labels"><span class="nbl-i" aria-hidden="true"></span>Open in the notebook</a></aside><aside class="fp-note" id="n12" tabindex="-1" aria-labelledby="n12-t"><p class="fp-note-t" id="n12-t"><span class="fp-note-n" aria-hidden="true">12</span>Where the facts come from</p><p class="fp-note-l">Official sources first, each named with its address and the date it was read.</p><a class="nbl" href="../notebook/#method/sources&from=front~r20" data-nb="method/sources"><span class="nbl-i" aria-hidden="true"></span>Open in the notebook</a></aside></div></div>
+</section>
+<div class="fp-readon"><button type="button" class="fp-btn is-quiet fp-more" data-to="2">Read on</button></div>
+<nav class="fp-deep" aria-label="Go deeper">
+<p class="fp-deepk">Go deeper</p>
+<p>The notebook holds the sources, the full tables and what each figure cannot tell you: one page per topic, with a side rail of the
+site&rsquo;s spaces. The marks on this page open the exact page.</p>
+<div class="fp-deepl"><a class="nbl fp-btn" href="../notebook/#start&from=front~top" data-nb="start"><span class="nbl-i" aria-hidden="true"></span>Open the notebook</a>
+<a class="fp-btn is-quiet" href="../../../ballot/us/#race=2026-NC-S2">This race on On The Ballot</a>
+<a class="fp-btn is-quiet" href="../../../night/us/#race=2026-NC-S2">This race on Election Night</a>
+<a class="fp-btn is-quiet" href="../../../ballot/us/#race=2026-NC-S2&tab=coverage">The Coverage tab</a></div>
+<p class="fp-fine">Figures read from the site&rsquo;s own pages on November 12, 2026; the count as reported November 11, 5:14 p.m. ET.
+Forecast model us-pre-1.2; coverage links checked November 8, 2026.</p>
+</nav>
+</article>
+<p class="sbx-note">A sandbox example on the draft site: a possible new layout, not the site as it is. The figures are real, read from this site&rsquo;s own pages for North Carolina&rsquo;s U.S. Senate race; the layout is what is being tried.</p>
+<script>(() => {
+  const root = document.querySelector("[data-fp-root]"); if (!root) return;
+  const $ = (s, el = root) => el.querySelector(s), $$ = (s, el = root) => Array.from(el.querySelectorAll(s));
+  const H = document.documentElement, KEY = "tca.sbx.front.len";
+  const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* this visit only */ } } };
+  const motion = () => H.dataset.motion === "full" && H.dataset.calm !== "on" && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const wide = matchMedia("(min-width:1100px)");
+
+  /* how much to read */
+  const HINT = {"1": "Showing the gist: about 1 minute to read, about 252 words.", "2": "Showing the story: about 4 minutes to read, about 882 words.", "3": "Showing everything: about 6 minutes to read, about 1,380 words."}, WORDS = {"1": "1 min", "2": "4 min", "3": "6 min"}, MORE = {"1": "Read on: the story (about 4 minutes)", "2": "Read everything (about 6 minutes in all)"};
+  const radios = $$(".fp-len input"), hint = $(".fp-lenhint"), more = $(".fp-more");
+  $$(".fp-len small").forEach(s => { s.textContent = WORDS[s.dataset.w] || ""; });
+  function setLen(v, save) {
+    if (!HINT[v]) v = "2";
+    root.dataset.fpLen = v;
+    radios.forEach(r => { r.checked = r.value === v; });
+    if (hint) hint.textContent = HINT[v];
+    if (more) { const next = String(Math.min(3, +v + 1)); more.dataset.to = next; more.textContent = MORE[v] || ""; }
+    if (save) store.set(KEY, v);
+    requestAnimationFrame(layNotes);
+  }
+  radios.forEach(r => r.addEventListener("change", () => setLen(r.value, true)));
+  if (more) more.addEventListener("click", () => {
+    const to = more.dataset.to, was = root.dataset.fpLen;
+    const first = $(`.fp-sec[data-fp-min="${to}"]`) || $$(`[data-fp-min="${to}"]`).find(el => !el.classList.contains("fp-margin"));
+    setLen(to, true);
+    if (first && +was < +to) requestAnimationFrame(() => {
+      first.setAttribute("tabindex", "-1"); first.focus({ preventScroll: true }); first.scrollIntoView({ block: "start" });
+      if (first.classList.contains("fp-row")) { first.classList.add("is-back"); setTimeout(() => first.classList.remove("is-back"), 2600); }
+    });
+  });
+
+  /* the margin notes take no room of their own on a wide screen: keep each below the one before it */
+  const margins = $$(".fp-margin:not(.fp-margin-nav)"), art = $(".fp-art");
+  function layNotes() {
+    margins.forEach(m => { m.style.marginTop = ""; });
+    if (art) art.style.paddingBottom = "";
+    if (!wide.matches) return;
+    let bottom = -1e9, deepest = 0;
+    margins.forEach(m => {
+      if (!m.offsetParent || !m.getClientRects().length) return;
+      let r = m.getBoundingClientRect();
+      const top = r.top + scrollY;
+      if (top < bottom + 16) m.style.marginTop = Math.round(bottom + 16 - top) + "px";
+      r = m.getBoundingClientRect();
+      bottom = r.bottom + scrollY;
+      if (bottom > deepest) deepest = bottom;
+    });
+    if (art) {
+      const ab = art.getBoundingClientRect().bottom + scrollY;
+      if (deepest > ab) art.style.paddingBottom = Math.round(deepest - ab + 8) + "px";
+    }
+  }
+  setLen(store.get(KEY) || "2", false);
+
+  /* the margin notes: beside the text on a wide screen, under it when tapped on a phone */
+  const marks = $$(".fp-ref");
+  const noteOf = m => document.getElementById(m.getAttribute("aria-controls"));
+  function mode() {
+    marks.forEach(m => {
+      const n = noteOf(m); if (!n) return;
+      if (wide.matches) { m.removeAttribute("aria-expanded"); n.classList.remove("is-open"); }
+      else m.setAttribute("aria-expanded", n.classList.contains("is-open") ? "true" : "false");
+    });
+    layNotes();
+  }
+  wide.addEventListener("change", mode); mode();
+  let rt = 0;
+  addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(layNotes, 120); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(layNotes);
+  addEventListener("load", () => { layNotes(); setTimeout(layNotes, 700); });
+  marks.forEach(m => {
+    const n = noteOf(m); if (!n) return;
+    const hot = on => { n.classList.toggle("is-hot", on); m.classList.toggle("is-hot", on); };
+    m.addEventListener("click", () => {
+      if (wide.matches) { hot(true); n.focus({ preventScroll: false }); setTimeout(() => hot(false), 1800); return; }
+      const open = !n.classList.contains("is-open");
+      n.classList.toggle("is-open", open);
+      m.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) n.focus({ preventScroll: true });
+    });
+    m.addEventListener("mouseenter", () => hot(true)); m.addEventListener("mouseleave", () => hot(false));
+    m.addEventListener("focus", () => hot(true)); m.addEventListener("blur", () => hot(false));
+    n.addEventListener("mouseenter", () => hot(true)); n.addEventListener("mouseleave", () => hot(false));
+  });
+
+  /* the lead: the bar wipes in and the big figures count up, once, with motion on */
+  const fmt = (v, f) => f === "p" ? v.toFixed(1) + "%" : f === "d" ? v.toFixed(1) : Math.round(v).toLocaleString("en-US");
+  if (motion()) {
+    const bar = $(".fp-bar"); if (bar) bar.classList.add("is-anim");
+    const nums = $$(".fp-num");
+    nums.forEach(el => { el.dataset.t = el.textContent; });
+    const t0 = performance.now(), D = 1150, ease = t => 1 - Math.pow(1 - t, 3);
+    const step = now => {
+      const t = Math.min(1, (now - t0) / D), e = ease(t);
+      nums.forEach(el => { el.textContent = t < 1 ? fmt(+el.dataset.v * e, el.dataset.f) : el.dataset.t; });
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  /* how far along the story the reader is */
+  const prog = $(".fp-prog i");
+  let pending = false;
+  function paint() {
+    pending = false;
+    if (!prog || !art) return;
+    const r = art.getBoundingClientRect(), total = r.height - innerHeight;
+    const done = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+    prog.style.transform = "scaleX(" + done.toFixed(4) + ")";
+  }
+  addEventListener("scroll", () => { if (!pending) { pending = true; requestAnimationFrame(paint); } }, { passive: true });
+  addEventListener("resize", paint);
+  paint();
+
+  /* back from the notebook: the row it came from, shown even when the chosen length hides it */
+  function reveal() {
+    const id = location.hash.slice(1); if (!id) return;
+    const el = document.getElementById(id); if (!el || !root.contains(el) || el === root) return;
+    let need = 1;
+    for (let n = el; n && n !== root; n = n.parentElement) { const v = +(n.dataset.fpMin || 0); if (v > need) need = v; }
+    if (need > +root.dataset.fpLen) setLen(String(need), false);
+    const row = el.closest(".fp-row");
+    if (row) { row.classList.add("is-back"); setTimeout(() => row.classList.remove("is-back"), 2600); }
+    requestAnimationFrame(() => el.scrollIntoView({ block: row ? "center" : "start" }));
+  }
+  addEventListener("hashchange", reveal);
+  reveal();
+})();</script><script type="module" src="../gate/nbgate.js"></script></div>
+</main>
+<footer class="tca-foot">
+<div class="tca-wrap">
+<div class="grid">
+<div><h2 translate="no">The Civic Archive</h2><p class="house" data-t="1pvk8p3">Built from public records. No scores or ratings of any person, no advertising of its own, no donors.</p></div>
+<div><h2 data-t="0i9euzv">Go</h2><ul>
+<li><a href="../../../us/" data-t="1bd9dmr">Plain Congress</a></li><li><a href="../../../ballot/" data-t="1mkk73v">On The Ballot</a></li><li><a href="../../../night/" data-t="00ub434">Election Night</a></li>
+<li><a href="../../../#officials" data-t="0qe2y2x">Officials</a></li>
+<li><a href="../../../dashboard/" data-t="04zftyz">Dashboard</a></li>
+<li><a href="../../../rooms.html" data-t="19fwikz">All levels</a></li><li><a href="../../../cabin.html" data-tca-break data-t="0egjiwe">Take a break</a></li></ul></div>
+<div><h2 data-t="118pss8">This site</h2><ul>
+<li><a href="../../../method/" data-t="16cmxjk">Method</a></li><li><a href="../../../method/#sources" data-t="195ydw1">Sources</a></li><li><a href="../../../access/" data-t="0ow1nnv">Access</a></li></ul></div>
+
+<div data-tca-site><h2 data-t="0iz1zby">Follow and write</h2><ul><li><a href="mailto:hello@thecivicarchive.org" translate="no">hello@thecivicarchive.org</a></li><li><a rel="me" href="https://bsky.app/profile/thecivicarchive.org" translate="no">Bluesky</a></li><li><a rel="me" href="https://mastodon.social/@thecivicarchive" translate="no">Mastodon</a></li></ul></div></div>
+<p class="fine"><span data-t="1v5z208" data-tv="{&quot;0&quot;:&quot;4.1.070&quot;}">The Civic Archive v4.1.070</span><span data-t="1nssakk">Generated on <time datetime="2026-11-12">November 12, 2026</time></span></p>
+</div>
+</footer>
+<nav class="tca-tabs" aria-label="Sections" data-ta="aria-label:1keh1vx"><ul><li><a href="../../../us/"><span class="tca-ico" data-icon="bills" data-tile="brass"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="i-s2"><path class="i-fill" pathLength="1" d="M7.4 5h7.3l2.9 2.9V19.6H7.4z"/></g><g class="i-s1"><path class="i-fill" pathLength="1" d="M7.4 5h7.3l2.9 2.9V19.6H7.4z"/></g><g class="i-pg"><path class="i-fill" pathLength="1" d="M7.4 5h7.3l2.9 2.9V19.6H7.4z"/><path pathLength="1" d="M14.7 5v2.9h2.9"/><path pathLength="1" d="M9.8 11.1h5.4"/><path pathLength="1" d="M9.8 13.9h5.4"/><path pathLength="1" d="M9.8 16.7h3.4"/></g></svg></span><span data-t="01bdr31">Bills</span></a></li><li><a href="../../../ballot/"><span class="tca-ico" data-icon="ballot" data-tile="verd"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="i-box"><path pathLength="1" d="M4.4 12.6h15.2v7.4H4.4z"/><path pathLength="1" d="M8.3 15.4h7.4"/></g><g class="i-paper"><path class="i-fill" pathLength="1" d="M8.4 3.8h7.2v8.8H8.4z"/><path class="i-tick" pathLength="1" d="M10.1 8.3l1.5 1.5 2.4-2.7"/></g></svg></span><span data-t="0df8di7">Ballot</span></a></li><li><a href="../../../night/"><span class="tca-ico" data-icon="night" data-tile="brass"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="i-moon" pathLength="1" d="M6.81 3.92A3.5 3.5 0 1 0 10.61 8.17A2.9 2.9 0 0 1 6.81 3.92z"/><path class="i-fill i-b1" pathLength="1" d="M5.4 19.6V15.6h2.8v4z"/><path class="i-fill i-b2" pathLength="1" d="M10.6 19.6V12.4h2.8v7.2z"/><path class="i-fill i-b3" pathLength="1" d="M15.8 19.6V9.2h2.8v10.4z"/><path pathLength="1" d="M3.6 19.6h16.8"/></svg></span><span data-t="17jx85x">Results</span></a></li><li><a href="../../../#officials"><span class="tca-ico" data-icon="officials" data-tile="brass"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="i-l"><path pathLength="1" d="M6.1 8.3a1.9 1.9 0 1 1 0 3.8a1.9 1.9 0 1 1 0-3.8z"/><path pathLength="1" d="M2.6 18.6c0-2.4 1.5-4.2 3.5-4.2c.9 0 1.7.3 2.3.9"/></g><g class="i-r"><path pathLength="1" d="M17.9 8.3a1.9 1.9 0 1 1 0 3.8a1.9 1.9 0 1 1 0-3.8z"/><path pathLength="1" d="M21.4 18.6c0-2.4-1.5-4.2-3.5-4.2c-.9 0-1.7.3-2.3.9"/></g><g class="i-c"><path class="i-fill i-solid" d="M6.8 20.2c0-3.2 2.3-5.7 5.2-5.7s5.2 2.5 5.2 5.7z"/><path class="i-fill" pathLength="1" d="M12 5.5a2.7 2.7 0 1 1 0 5.4a2.7 2.7 0 1 1 0-5.4z"/><path pathLength="1" d="M6.8 20.2c0-3.2 2.3-5.7 5.2-5.7s5.2 2.5 5.2 5.7"/></g></svg></span><span data-t="0qe2y2x">Officials</span></a></li><li><a href="../../../method/"><span class="tca-ico" data-icon="method" data-tile="verd"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="i-fill" pathLength="1" d="M12 3.5l6.9 2.6v5.3c0 4.3-2.9 7.6-6.9 9.1c-4-1.5-6.9-4.8-6.9-9.1V6.1z"/><path class="i-scan" pathLength="1" d="M7.2 7.4h9.6"/><path class="i-ck" pathLength="1" d="M8.8 12.2l2.3 2.3 4.2-4.5"/></svg></span><span data-t="16cmxjk">Method</span></a></li><li><a href="../../../access/"><span class="tca-ico" data-icon="access" data-tile="both"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="i-rip" pathLength="1" d="M12 2.9a9.1 9.1 0 1 1 0 18.2a9.1 9.1 0 1 1 0-18.2z"/><path class="i-ring" pathLength="1" d="M12 2.9a9.1 9.1 0 1 1 0 18.2a9.1 9.1 0 1 1 0-18.2z"/><path pathLength="1" d="M12 5.8a1.5 1.5 0 1 1 0 3a1.5 1.5 0 1 1 0-3z"/><path class="i-arm-l" pathLength="1" d="M12 10.7L7.5 9.8"/><path class="i-arm-r" pathLength="1" d="M12 10.7l4.5-.9"/><path pathLength="1" d="M12 10.7v3.6"/><path pathLength="1" d="M12 14.3l-2.3 4.1"/><path pathLength="1" d="M12 14.3l2.3 4.1"/></svg></span><span data-t="0ow1nnv">Access</span></a></li></ul></nav>
+<section class="tca-panel" id="tca-help" role="dialog" aria-modal="false" aria-labelledby="tca-help-h" hidden>
+<button class="x" type="button" aria-label="Close help" data-ta="aria-label:1tnzw3i"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+<h2 id="tca-help-h" tabindex="-1" data-t="1f8350a">Help</h2>
+<h3 data-t="00j0uvb">On this page</h3>
+<div class="tca-guide" id="tca-guide"></div>
+<h3 data-t="1swl2rj">Quick actions</h3>
+<ul class="tca-quick"><li><a href="../../../us/#bills"><span class="tca-ico" data-icon="bills" data-tile="brass"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="i-s2"><path class="i-fill" pathLength="1" d="M7.4 5h7.3l2.9 2.9V19.6H7.4z"/></g><g class="i-s1"><path class="i-fill" pathLength="1" d="M7.4 5h7.3l2.9 2.9V19.6H7.4z"/></g><g class="i-pg"><path class="i-fill" pathLength="1" d="M7.4 5h7.3l2.9 2.9V19.6H7.4z"/><path pathLength="1" d="M14.7 5v2.9h2.9"/><path pathLength="1" d="M9.8 11.1h5.4"/><path pathLength="1" d="M9.8 13.9h5.4"/><path pathLength="1" d="M9.8 16.7h3.4"/></g></svg></span><span data-t="0l76ro2">Find a bill</span></a></li><li><a href="../../../ballot/"><span class="tca-ico" data-icon="ballot" data-tile="verd"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="i-box"><path pathLength="1" d="M4.4 12.6h15.2v7.4H4.4z"/><path pathLength="1" d="M8.3 15.4h7.4"/></g><g class="i-paper"><path class="i-fill" pathLength="1" d="M8.4 3.8h7.2v8.8H8.4z"/><path class="i-tick" pathLength="1" d="M10.1 8.3l1.5 1.5 2.4-2.7"/></g></svg></span><span data-t="08u47mu">See who is on your ballot</span></a></li><li><a href="../../../night/"><span class="tca-ico" data-icon="night" data-tile="brass"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="i-moon" pathLength="1" d="M6.81 3.92A3.5 3.5 0 1 0 10.61 8.17A2.9 2.9 0 0 1 6.81 3.92z"/><path class="i-fill i-b1" pathLength="1" d="M5.4 19.6V15.6h2.8v4z"/><path class="i-fill i-b2" pathLength="1" d="M10.6 19.6V12.4h2.8v7.2z"/><path class="i-fill i-b3" pathLength="1" d="M15.8 19.6V9.2h2.8v10.4z"/><path pathLength="1" d="M3.6 19.6h16.8"/></svg></span><span data-t="0hfp6j6">Follow the count on Election Night</span></a></li><li><a href="../../../#officials"><span class="tca-ico" data-icon="officials" data-tile="brass"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g class="i-l"><path pathLength="1" d="M6.1 8.3a1.9 1.9 0 1 1 0 3.8a1.9 1.9 0 1 1 0-3.8z"/><path pathLength="1" d="M2.6 18.6c0-2.4 1.5-4.2 3.5-4.2c.9 0 1.7.3 2.3.9"/></g><g class="i-r"><path pathLength="1" d="M17.9 8.3a1.9 1.9 0 1 1 0 3.8a1.9 1.9 0 1 1 0-3.8z"/><path pathLength="1" d="M21.4 18.6c0-2.4-1.5-4.2-3.5-4.2c-.9 0-1.7.3-2.3.9"/></g><g class="i-c"><path class="i-fill i-solid" d="M6.8 20.2c0-3.2 2.3-5.7 5.2-5.7s5.2 2.5 5.2 5.7z"/><path class="i-fill" pathLength="1" d="M12 5.5a2.7 2.7 0 1 1 0 5.4a2.7 2.7 0 1 1 0-5.4z"/><path pathLength="1" d="M6.8 20.2c0-3.2 2.3-5.7 5.2-5.7s5.2 2.5 5.2 5.7"/></g></svg></span><span data-t="0ln2jtc">Find who represents you</span></a></li><li><a href="../../../method/"><span class="tca-ico" data-icon="method" data-tile="verd"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="i-fill" pathLength="1" d="M12 3.5l6.9 2.6v5.3c0 4.3-2.9 7.6-6.9 9.1c-4-1.5-6.9-4.8-6.9-9.1V6.1z"/><path class="i-scan" pathLength="1" d="M7.2 7.4h9.6"/><path class="i-ck" pathLength="1" d="M8.8 12.2l2.3 2.3 4.2-4.5"/></svg></span><span data-t="0588zjd">See how pages are made</span></a></li><li><button type="button" data-tca-open aria-controls="tca-access" aria-expanded="false"><span class="tca-ico" data-icon="access" data-tile="both"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="i-rip" pathLength="1" d="M12 2.9a9.1 9.1 0 1 1 0 18.2a9.1 9.1 0 1 1 0-18.2z"/><path class="i-ring" pathLength="1" d="M12 2.9a9.1 9.1 0 1 1 0 18.2a9.1 9.1 0 1 1 0-18.2z"/><path pathLength="1" d="M12 5.8a1.5 1.5 0 1 1 0 3a1.5 1.5 0 1 1 0-3z"/><path class="i-arm-l" pathLength="1" d="M12 10.7L7.5 9.8"/><path class="i-arm-r" pathLength="1" d="M12 10.7l4.5-.9"/><path pathLength="1" d="M12 10.7v3.6"/><path pathLength="1" d="M12 14.3l-2.3 4.1"/><path pathLength="1" d="M12 14.3l2.3 4.1"/></svg></span><span data-t="1ltdquq">Change reading and access</span></button></li></ul>
+<p class="tca-help-lv" data-tca-levels-line></p>
+<p class="tca-help-lv" data-tca-share-line></p>
+<h3 data-t="01nt58n">The app</h3>
+<div data-tca-app-help><p data-t="1hlf1z8">Keep this site on your phone or computer. <a href="../../../app/">Get the app</a>.</p></div>
+<h3 data-t="1oncyjo">Plain answers</h3>
+<div class="tca-faq"><details><summary data-t="0oxkiu7">Who pays for this site?</summary><div class="a"><p data-t="12tgo8a">Nobody pays to appear on it. The site runs no advertising of its own and has no donors. It is published on GitHub's free public hosting.</p></div></details>
+<details><summary data-t="13q51an">Does this site track me?</summary><div class="a"><p data-t="017ewhw">This site counts nothing about its readers: no page sends a visit, a click or a place anywhere, except as described below. There is no account and no sign-in. Your reading settings and your companion are kept in this browser, on this device, and are never sent anywhere.</p>
+<p data-t="1i74h9z">Where a page offers "Use my location", your place is worked out on your device and is not sent anywhere. Every page takes its type from this site. Three things come from other servers. The opening picture of Plain Congress shows the weather at the Capitol in Washington, from Open-Meteo; that request carries the Capitol's place, never yours. If you switch on street maps on a ballot or Forecasts page, OpenStreetMap's servers see which map squares are asked for, and the page says so. And if you type your address on a ballot or Forecasts page and press Look up, your browser sends it straight to the U.S. Census Bureau's address finder, which sends back where it is; this site never sees the address or keeps it.</p></div></details>
+<details><summary data-t="1wvydhx">What happens when I share a page?</summary><div class="a"><p data-t="014j5ih">A Share button sends a link. On a phone it opens your phone&rsquo;s own share sheet; on a computer, a short list of places, such as e-mail, Facebook or LinkedIn, or Copy link. Nothing is sent until you pick a place. The place you pick then sees the link and the short message with it. This site loads nothing from those services and never learns whom you share with. If a link would show roughly where you vote, the page says so first. <a href="../../../access/#sharing">The Access page</a> says more.</p></div></details>
+<details><summary data-t="1n456yk">Can I get it as an app?</summary><div class="a"><p data-t="1rq1w1x">Yes. You can keep this site on your phone, tablet or computer, installed from the site itself: free, with no app store and no account, and it updates itself. Pages you have opened, and a ballot you kept, still work with no connection. Installing sends nothing to this site; on Android, your browser&rsquo;s maker (Google, for Chrome) builds the app from the site&rsquo;s public description of itself. <a href="../../../app/">Get the app</a> shows how.</p></div></details>
+<details><summary data-t="1udkect">Why should I trust the ratings?</summary><div class="a"><p data-t="0solitt">You do not have to take them on trust. Facts come from official records and link back to them. Ratings are judgments, kept apart and labelled. Each one shows its evidence grade, its reasons, its sources and the version of the rubric it was made under.</p>
+<p data-t="0dxnytg">So far <data value="10">ten</data> bills carry a full set of ratings. They were applied by hand, by Claude, an AI model made by Anthropic, as a preview, and each says so. Who backed a bill is worked out from the recorded votes by a published formula. <a href="../../../method/">The Method page</a> has the whole rubric.</p></div></details></div>
+<h3 data-t="06tqjls">Your companion</h3>
+<p data-t="1hhrasz">It is here to open this guide, which changes with the page you are on. Every companion gives the same help. It never speaks on its own, and screen readers pass over it. Help stays in the top bar either way.</p>
+<fieldset class="tca-seg" data-axis="companion"><legend data-t="0s2wi0l">Companion</legend><div class="opts"><label><input type="radio" name="tca-ax-companion-help" value="on" checked><span data-t="0qvtz3k">On</span></label><label><input type="radio" name="tca-ax-companion-help" value="still"><span data-t="0ug8twx">Still</span></label><label><input type="radio" name="tca-ax-companion-help" value="off"><span data-t="03tlu3u">Off</span></label></div><span class="hint" data-t="0hbryi1">Still draws it once. Off never loads it.</span></fieldset>
+<ul class="tca-pickers" aria-label="Choose a companion" data-ta="aria-label:0c5osp5"><li><button type="button" data-skin="penguin" aria-pressed="false"><b data-t="0ynj9e3">Adélie penguin</b><i translate="no">Pygoscelis adeliae</i></button></li><li><button type="button" data-skin="chickadee" aria-pressed="false"><b data-t="0ypkwap">Black-capped chickadee</b><i translate="no">Poecile atricapillus</i></button></li><li><button type="button" data-skin="retriever" aria-pressed="false"><b data-t="1v0jaz2">Golden retriever</b><i translate="no">Canis familiaris</i></button></li><li><button type="button" data-skin="cat" aria-pressed="false"><b data-t="18kcta5">Tabby cat</b><i translate="no">Felis catus</i></button></li><li><button type="button" data-skin="squirrel" aria-pressed="false"><b data-t="0jcob8x">Eastern gray squirrel</b><i translate="no">Sciurus carolinensis</i></button></li><li><button type="button" data-skin="chipmunk" aria-pressed="false"><b data-t="0jgriaq">Eastern chipmunk</b><i translate="no">Tamias striatus</i></button></li><li><button type="button" data-skin="snail" aria-pressed="false"><b data-t="1obty59">Garden snail</b><i translate="no">Cornu aspersum</i></button></li></ul>
+</section>
+<section class="tca-panel wide" id="tca-access" role="dialog" aria-modal="false" aria-labelledby="tca-access-h" hidden>
+<button class="x" type="button" aria-label="Close reading and access" data-ta="aria-label:0gasj5g"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg></button><h2 id="tca-access-h" tabindex="-1" data-t="03lf5oa">Meet me where I am</h2>
+<p data-t="15wjbvs">Choose how much you want to see and what you came for. The facts stay the same at every level; only how much shows at once changes.</p>
+<div class="tca-meet" data-tca-meet></div>
+<h3 class="tca-access-h3" data-t="1jkfxkd">Reading &amp; access</h3>
+<p data-t="1yn5qo7">Kept on this device only. Nothing is sent anywhere. Turn on as many as help: they combine. Where two differ, the larger text, the more space, the less motion and the quieter companion win. Otherwise the one you chose last wins.</p>
+<h3 data-t="1sgjqd3">Presets</h3>
+<ul class="tca-presets"><li><button type="button" data-preset="adhd" aria-pressed="false"><b data-t="0m382n0">ADHD</b><span data-t="1ybkgh9">Section labels, reading times and a progress line. Less motion.</span></button></li><li><button type="button" data-preset="focus" aria-pressed="false"><b data-t="1g9augj">Focus</b><span data-t="1k2xpuo">One column, the extras put away (Show more brings them back), no companion.</span></button></li><li><button type="button" data-preset="dyslexia" aria-pressed="false"><b data-t="0qeuya2">Dyslexia</b><span data-t="0zeuq0v">Lexend type, more space, plain words, larger text.</span></button></li><li><button type="button" data-preset="lowvision" aria-pressed="false"><b data-t="041j9h3">Low vision</b><span data-t="0w6p6wf" data-tv="{&quot;0&quot;:&quot;150&quot;}">Atkinson Hyperlegible at 150%, high contrast, more space.</span></button></li><li><button type="button" data-preset="colour" aria-pressed="false"><b data-t="12ixzjn">Colour vision</b><span data-t="137dpoj">Chart colours for red-green colour blindness, with patterns.</span></button></li><li><button type="button" data-preset="screenreader" aria-pressed="false"><b data-t="0j48xwe">Screen reader and keyboard</b><span data-t="04pevt0">No motion, more space, no companion.</span></button></li><li><button type="button" data-preset="plain" aria-pressed="false"><b data-t="1mx78rf">Plain language</b><span data-t="0c86m35">Plain words where a plain version is written.</span></button></li><li><button type="button" data-preset="calm" aria-pressed="false"><b data-t="0e6l5x2">Calm</b><span data-t="0z4n983">No motion, no countdowns, grey charts.</span></button></li></ul>
+<h3 data-t="1gpbu44">Each setting</h3>
+<fieldset class="tca-seg" data-axis="scale"><legend data-t="0c7nuir">Text size</legend><div class="opts"><label><input type="radio" name="tca-ax-scale" value="100" checked><span>100%</span></label><label><input type="radio" name="tca-ax-scale" value="115"><span>115%</span></label><label><input type="radio" name="tca-ax-scale" value="130"><span>130%</span></label><label><input type="radio" name="tca-ax-scale" value="150"><span>150%</span></label><label><input type="radio" name="tca-ax-scale" value="200"><span>200%</span></label></div></fieldset><fieldset class="tca-seg" data-axis="face"><legend data-t="0dljeys">Typeface</legend><div class="opts"><label><input type="radio" name="tca-ax-face" value="standard" checked><span data-t="000vuco">Standard</span></label><label><input type="radio" name="tca-ax-face" value="dyslexia"><span data-t="1upxchf">Lexend</span></label><label><input type="radio" name="tca-ax-face" value="hyperlegible"><span data-t="03uuouo">Atkinson Hyperlegible</span></label></div><span class="hint" data-t="1lvlbec">Lexend and Atkinson Hyperlegible were each designed to be easier to read.</span></fieldset><fieldset class="tca-seg" data-axis="space"><legend data-t="11l55em">Spacing</legend><div class="opts"><label><input type="radio" name="tca-ax-space" value="standard" checked><span data-t="000vuco">Standard</span></label><label><input type="radio" name="tca-ax-space" value="generous"><span data-t="1frqcff">Generous</span></label></div></fieldset><fieldset class="tca-seg" data-axis="contrast"><legend data-t="0a2z79v">Contrast</legend><div class="opts"><label><input type="radio" name="tca-ax-contrast" value="standard" checked><span data-t="000vuco">Standard</span></label><label><input type="radio" name="tca-ax-contrast" value="high"><span data-t="1gq8xlp">High</span></label><label><input type="radio" name="tca-ax-contrast" value="dark"><span data-t="0j8m6w5">Dark</span></label></div></fieldset><fieldset class="tca-seg" data-axis="lang"><legend data-t="00oj38q">Words</legend><div class="opts"><label><input type="radio" name="tca-ax-lang" value="standard" checked><span data-t="000vuco">Standard</span></label><label><input type="radio" name="tca-ax-lang" value="plain"><span data-t="19zciyv">Plain</span></label></div><span class="hint" data-t="0c86m35">Plain words where a plain version is written.</span></fieldset><fieldset class="tca-seg" data-axis="depth"><legend data-t="0ei31dg">Detail</legend><div class="opts"><label><input type="radio" name="tca-ax-depth" value="standard" checked><span data-t="000vuco">Standard</span></label><label><input type="radio" name="tca-ax-depth" value="detailed"><span data-t="1s4w7ol">More structure</span></label><label><input type="radio" name="tca-ax-depth" value="focus"><span data-t="1g9augj">Focus</span></label></div><span class="hint" data-t="0dc5dba">More structure adds section labels, reading times and a progress line. Focus puts the extras away until you choose Show more or a higher level, which sets this back to Standard.</span></fieldset><fieldset class="tca-seg" data-axis="motion"><legend data-t="1be7sjr">Motion</legend><div class="opts"><label><input type="radio" name="tca-ax-motion" value="full" checked><span data-t="0qvtz3k">On</span></label><label><input type="radio" name="tca-ax-motion" value="reduced"><span data-t="13c5yop">Reduced</span></label></div></fieldset><fieldset class="tca-seg" data-axis="sheets"><legend data-t="0xu94fn">Sheet speed</legend><div class="opts"><label><input type="radio" name="tca-ax-sheets" value="full" checked><span data-t="0wpni4y" data-tv="{&quot;0&quot;:&quot;5&quot;}">Full (5 seconds)</span></label><label><input type="radio" name="tca-ax-sheets" value="quick"><span data-t="0icc9p9" data-tv="{&quot;0&quot;:&quot;1&quot;}">Quick (1 second)</span></label><label><input type="radio" name="tca-ax-sheets" value="instant"><span data-t="1hkhxsi">Instant</span></label></div><span class="hint" data-t="13a6nrn">How a member&#x27;s page changes sheets. Any click, tap or key skips the move. Motion off makes every change instant.</span></fieldset><fieldset class="tca-seg" data-axis="reveal"><legend data-t="1nl1oaq">Scroll fade</legend><div class="opts"><label><input type="radio" name="tca-ax-reveal" value="full" checked><span data-t="0zf1lr0">Full</span></label><label><input type="radio" name="tca-ax-reveal" value="subtle"><span data-t="0vjmc48">Subtle</span></label><label><input type="radio" name="tca-ax-reveal" value="off"><span data-t="03tlu3u">Off</span></label></div><span class="hint" data-t="1ruvhjz">How text fades in and out at the edges of the screen.</span></fieldset><fieldset class="tca-seg" data-axis="calm"><legend data-t="0e6l5x2">Calm</legend><div class="opts"><label><input type="radio" name="tca-ax-calm" value="off" checked><span data-t="03tlu3u">Off</span></label><label><input type="radio" name="tca-ax-calm" value="on"><span data-t="0qvtz3k">On</span></label></div><span class="hint" data-t="16davgj">No countdowns and no motion. Chart bars get patterns.</span></fieldset><fieldset class="tca-seg" data-axis="palette"><legend data-t="0x5xi9a">Chart colours</legend><div class="opts"><label><input type="radio" name="tca-ax-palette" value="standard" checked><span data-t="000vuco">Standard</span></label><label><input type="radio" name="tca-ax-palette" value="deut"><span data-t="01i5dfk">Red-green (deuteranopia)</span></label><label><input type="radio" name="tca-ax-palette" value="prot"><span data-t="07s9hok">Red-green (protanopia)</span></label><label><input type="radio" name="tca-ax-palette" value="trit"><span data-t="0kisnvg">Blue-yellow (tritanopia)</span></label><label><input type="radio" name="tca-ax-palette" value="mono"><span data-t="17bhot0">Grey only</span></label></div><span class="hint" data-t="00iywdk">Changes the colours of charts only, and adds patterns.</span></fieldset><fieldset class="tca-seg" data-axis="companion"><legend data-t="0s2wi0l">Companion</legend><div class="opts"><label><input type="radio" name="tca-ax-companion" value="on" checked><span data-t="0qvtz3k">On</span></label><label><input type="radio" name="tca-ax-companion" value="still"><span data-t="0ug8twx">Still</span></label><label><input type="radio" name="tca-ax-companion" value="off"><span data-t="03tlu3u">Off</span></label></div><span class="hint" data-t="0hbryi1">Still draws it once. Off never loads it.</span></fieldset>
+<div class="tca-row"><button class="tca-btn" type="button" data-tca-reset data-t="0x29xjq">Put everything back</button></div>
+</section>
+<div id="tca-live" class="tca-sr" role="status" aria-live="polite"></div>
+</body>
+</html>
