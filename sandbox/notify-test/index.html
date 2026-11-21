@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Notification test</title>
+<style>
+:root{--bg:#F4EFE4;--card:#fffdf8;--ink:#1d1b17;--muted:#5d5850;--line:#d8cfbd;--verd:#2F6B5E}
+@media (prefers-color-scheme:dark){:root{--bg:#16181d;--card:#1f2228;--ink:#ecebe7;--muted:#a9a59c;--line:#3a3d44;--verd:#7fc3b0}}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+main{max-width:560px;margin:0 auto;padding:28px 18px 60px}
+h1{font-family:Georgia,serif;font-weight:400;font-size:32px;margin:0 0 8px}
+p{margin:0 0 14px} .muted{color:var(--muted);font-size:15px}
+button{display:block;width:100%;font:inherit;font-weight:700;border:0;border-radius:12px;padding:15px 18px;margin:10px 0;background:var(--verd);color:#fff;cursor:pointer}
+button.alt{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+#out{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:16px;font-size:15px;white-space:pre-wrap;min-height:3em}
+</style></head><body><main>
+<h1>Notification test</h1>
+<p>A private test page on the draft site (not linked anywhere, hidden from search engines). It checks that this phone can show the site's notifications, the same way Election Night alerts arrive.</p>
+<p class="muted">Tap a button. If your browser asks, choose <b>Allow</b>. Nothing about you is sent anywhere: the notification is made on this device.</p>
+<button type="button" id="now">Send a test notification now</button>
+<button type="button" id="later" class="alt">Send one in 15 seconds (then switch to another app)</button>
+<div id="out" aria-live="polite">Ready.</div>
+<p class="muted" style="margin-top:16px">On an iPhone, notifications only work after the site is added to the Home Screen and opened from there.</p>
+</main>
+<script>
+(function () {
+  var out = document.getElementById("out");
+  var say = function (t) { out.textContent = t; };
+  var ROOT = location.origin + "/dev/";
+  var opts = function (n) {
+    return {body: "If you can see this, Election Night alerts can reach this device while the site or app is open." + (n ? " (sent after " + n + " seconds)" : ""),
+            icon: ROOT + "icon-192.png", tag: "tca-test", renotify: true, timestamp: Date.now(), data: {url: ROOT + "night/"}};
+  };
+  async function ready() {
+    if (!("Notification" in window)) { say("This browser has no notifications here. On an iPhone, add the site to the Home Screen first and open it from there."); return null; }
+    var p = Notification.permission;
+    if (p === "default") { try { p = await Notification.requestPermission(); } catch (e) { p = "denied"; } }
+    if (p !== "granted") { say("Notifications are blocked for this site (" + p + ").\nTo allow them: tap the lock or settings icon beside the address, then Permissions or Site settings, then Notifications: Allow. Then try again."); return null; }
+    var reg = null;
+    if ("serviceWorker" in navigator) {
+      try {
+        reg = await navigator.serviceWorker.getRegistration(ROOT) || await navigator.serviceWorker.register(ROOT + "sw.js", {scope: "/dev/"});
+        await navigator.serviceWorker.ready;
+      } catch (e) { reg = null; }
+    }
+    return {reg: reg};
+  }
+  async function send(n) {
+    var r = await ready(); if (!r) return;
+    var title = "✅ Test: notifications work here";
+    try {
+      if (r.reg && r.reg.showNotification) { await r.reg.showNotification(title, opts(n)); say("Sent through the site's background script" + (n ? " after " + n + " seconds" : "") + ". You should see it now. Tap it to open Election Night."); }
+      else { new Notification(title, opts(n)); say("Sent directly" + (n ? " after " + n + " seconds" : "") + " (no background script here). You should see it now."); }
+    } catch (e) { say("It did not show: " + (e && e.message ? e.message : e)); }
+  }
+  document.getElementById("now").addEventListener("click", function () { send(0); });
+  document.getElementById("later").addEventListener("click", async function () {
+    var r = await ready(); if (!r) return;
+    say("Waiting 15 seconds. Switch to another app or lock the screen now.");
+    setTimeout(function () { send(15); }, 15000);
+  });
+})();
+</script></body></html>
