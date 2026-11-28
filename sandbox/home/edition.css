@@ -1,0 +1,539 @@
+/* The Daily Record: the home page's draft (sandbox). The front page of the public record, laid over the reading room's
+   picture when there is one, and a whole, handsome page on its own when there is not.
+   Chrome: brass, verdigris, parchment and ink. Red and blue appear only in the party bars beside a recorded vote.
+   Modes (on #ed): data-mode film | still | plain; data-fit box (the paper's fixed live area, scaled to the column) | flow
+   (ordinary text that follows the reader's size, face and spacing); data-layout wide (1200 x 1100) | narrow (390 x 607). */
+
+html.ed-page{
+  --np:#F8F3E8;--np-2:#F1EADB;--np-rule:#D3CAB6;--np-rule-2:#1A1C20;
+  --dem:#2E5BE6;--rep:#D8453A;--oth:#646B76;
+  --glass:rgba(246,243,236,.64);
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .26 0 0 0 0 .18 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23n%29'/%3E%3C/svg%3E");
+  --lamp-glow:rgba(255,190,100,.22);
+}
+html.ed-page[data-contrast="dark"]{--np:#15171A;--np-2:#1C1F23;--np-rule:#3A3F46;--np-rule-2:#EDEAE3;--dem:#8FA8FF;--rep:#FF8A80;--oth:#A3A9B2;--glass:rgba(18,20,23,.72);--lamp-glow:rgba(255,186,96,.10)}
+html.ed-page[data-contrast="high"]{--np:#FFFFFF;--np-2:#FFFFFF;--np-rule:#000000;--np-rule-2:#000000;--dem:#1D3FBF;--rep:#B3261E;--oth:#000000;--glass:#FFFFFF;--grain:none;--lamp-glow:transparent}
+
+.ed{position:relative;color:var(--ink)}
+.ed [hidden]{display:none!important}
+.ed a{color:var(--verd-ink)}
+.ed :focus-visible{outline:var(--focus-w) solid var(--focus);outline-offset:3px}
+.ed p{margin:0}
+
+/* ============================== the top bar: clear as glass over the picture, solid once the page takes over ============================== */
+html.ed-page .tca-top{transition:background-color .35s ease,border-color .35s ease}
+html.ed-page.ed-glass .tca-top{background:var(--glass);border-bottom-color:transparent;-webkit-backdrop-filter:blur(18px) saturate(1.15);backdrop-filter:blur(18px) saturate(1.15)}
+html.ed-page[data-contrast="high"].ed-glass .tca-top{background:#FFFFFF;border-bottom-color:#000000;-webkit-backdrop-filter:none;backdrop-filter:none}
+@media (prefers-reduced-transparency:reduce){html.ed-page.ed-glass .tca-top{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}}
+html.ed-page[data-motion="reduced"] .tca-top,html.ed-page[data-calm="on"] .tca-top{transition:none}
+/* the phone's tab bar: the same glass while the picture is under it */
+html.ed-page .tca-tabs{transition:background-color .35s ease}
+html.ed-page.ed-glass .tca-tabs{background:var(--glass);border-top-color:transparent;-webkit-backdrop-filter:blur(18px) saturate(1.15);backdrop-filter:blur(18px) saturate(1.15)}
+html.ed-page[data-contrast="high"].ed-glass .tca-tabs{background:#FFFFFF;border-top-color:#000000;-webkit-backdrop-filter:none;backdrop-filter:none}
+@media (prefers-reduced-transparency:reduce){html.ed-page.ed-glass .tca-tabs{background:var(--bg);-webkit-backdrop-filter:none;backdrop-filter:none}}
+html.ed-page:is([data-motion="reduced"],[data-calm="on"]) .tca-tabs{transition:none}
+/* the draft's notice (draft copies only): one quiet line, its words beside the link, smaller type that still grows with
+   the reader's text size, but more slowly than the page's */
+html.ed-page .tca-draft{display:flex;align-items:center;justify-content:center;gap:2px 12px;font-size:calc(.5rem + 5px);line-height:1.3;text-align:left}
+html.ed-page .tca-draft a{flex:none;white-space:nowrap}
+/* the site's footer, on this page: an e-mail address may break, so 200% text on a 320 px screen needs no sideways scroll
+   (the same line belongs in the shell's own stylesheet, for every page) */
+html.ed-page .tca-foot a{overflow-wrap:anywhere}
+
+/* ============================== the first screen: the picture, the hour, the three ways ============================== */
+.ed{--hero-h:clamp(400px,min(calc(100svh - 120px),56.25vw),1120px)}
+.ed[data-orient="portrait"]{--hero-h:clamp(360px,min(calc(100svh - 150px),160vw),900px)}
+.ed-hero{position:relative}
+.ed:not([data-mode="plain"]) .ed-hero{margin-top:calc(-1 * var(--ed-bar,var(--bar-h)))}
+.ed-stage{position:relative;height:var(--hero-h);overflow:clip;background:#2B241E;isolation:isolate}
+.ed[data-mode="plain"] .ed-stage{display:none}
+.ed-still{position:absolute;inset:0;margin:0}
+.ed-still picture,.ed-still-img{display:block;width:100%;height:100%}
+.ed-still picture:empty{display:none}      /* the reader's-hour slot when no script filled it: the morning picture in noscript shows instead */
+.ed-still-img{object-fit:cover;object-position:var(--ed-px,50%) var(--ed-py,72%);background-size:cover;background-position:var(--ed-px,50%) var(--ed-py,72%);background-repeat:no-repeat}
+.ed-stage::after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(20,16,12,.20),transparent 22%),linear-gradient(to top,rgba(20,16,12,.30),transparent 30%)}
+html.ed-page[data-contrast="high"] .ed-stage::after{display:none}
+
+/* what the picture prints on its paper, card and slip, and the lamp's light: laid over the picture, never read out. Each
+   print lies on its corners in two parts (edition.js sheet()): a wrapper with the perspective and one painted dot of its
+   own, so the type and the rules are drawn crisp; the layer of prints is inked onto the picture as a whole */
+.ed-ov{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:clip;mix-blend-mode:multiply}
+.ed-q{position:absolute;left:0;top:0;width:0;height:0;transform-origin:0 0}
+.ed-q::before{content:"";position:absolute;left:0;top:0;width:1px;height:1px;background:rgba(127,127,127,.012)}
+.ed-q>*{position:absolute!important;left:0!important;top:0!important;margin:0!important;transform-origin:0 0!important;background:transparent!important;box-shadow:none!important}
+@media (forced-colors:active){.ed-ov{mix-blend-mode:normal}}
+.ed-lamp{position:absolute;inset:0;width:100%;height:100%;z-index:2;object-fit:cover;object-position:var(--ed-px,50%) var(--ed-py,72%);pointer-events:none;opacity:0;
+  mix-blend-mode:screen;mix-blend-mode:plus-lighter;transition:opacity .9s ease}
+.ed[data-lamp-layer="sub"] .ed-lamp{mix-blend-mode:difference}
+.ed[data-lamp-layer="add"][data-lamp="on"] .ed-lamp,.ed[data-lamp-layer="sub"][data-lamp="off"] .ed-lamp{opacity:1}
+/* by day the lamp's own light is weak beside the sun: twice the layer, so its pool on the paper's corner shows */
+.ed:is([data-hour="morning"],[data-hour="afternoon"])[data-lamp-layer="add"] .ed-lamp{filter:brightness(2)}
+html.ed-page:is([data-motion="reduced"],[data-calm="on"]) .ed-lamp{transition:none}
+@media (prefers-reduced-motion:reduce){.ed-lamp{transition:none}}
+
+/* places in the picture a pointer can touch (each has a button of its own just below the picture, for keys and readers) */
+.ed-spot{position:absolute;z-index:5;width:60px;height:60px;margin:-30px 0 0 -30px;border-radius:50%;pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ed-spot::after{content:"";position:absolute;inset:16px;border-radius:50%;border:2px solid rgba(255,238,206,0);box-shadow:0 0 0 0 rgba(168,118,46,0);transition:border-color .25s ease,box-shadow .25s ease,inset .25s ease}
+.ed-spot:hover::after{inset:12px;border-color:rgba(255,238,206,.9);box-shadow:0 0 0 7px rgba(168,118,46,.28)}
+.ed-spot[data-spot="card"],.ed-spot[data-spot="slip"]{border-radius:8px}
+/* the object of the day in the film: a place to tap, centred on it and scaled with the table */
+.ed-ospot{display:block;width:0;height:0;cursor:pointer}
+.ed-ospot::after{content:"";position:absolute;left:-60px;top:-60px;width:120px;height:120px;border-radius:50%}
+
+/* the plate under the picture: the hour, the way down to the paper, the three ways to read */
+.ed-first{position:relative;z-index:6;padding:0 var(--gutter)}
+.ed:not([data-mode="plain"]) .ed-first{margin-top:-58px}
+.ed[data-mode="plain"] .ed-first{padding-top:clamp(14px,2.4vw,26px)}
+.ui-plate{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"hour" "ways" "line";gap:12px 28px;align-items:center;
+  padding:14px clamp(14px,2vw,22px) 16px;font-family:var(--font-ui);line-height:var(--lh-ui);
+  background:color-mix(in srgb,var(--surface) 95%,transparent);border:1px solid var(--line);border-radius:var(--radius-l);box-shadow:var(--shadow-2);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);position:relative;overflow:clip}
+.ui-plate::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--hour-rule,var(--brass))}
+.ed[data-hour="morning"]{--hour-rule:linear-gradient(90deg,#E9D29C,#A8762E)}
+.ed[data-hour="afternoon"]{--hour-rule:linear-gradient(90deg,#E3B865,#A8762E)}
+.ed[data-hour="dusk"]{--hour-rule:linear-gradient(90deg,#C98852,#7A5418)}
+.ed[data-hour="night"]{--hour-rule:linear-gradient(90deg,#2F6B5E,#1A1C20)}
+html.ed-page[data-contrast="high"] .ui-plate{background:#FFFFFF;border:2px solid #000000;box-shadow:none}
+html.ed-page[data-contrast="high"] .ui-plate::before{background:#000000}
+@media (min-width:62em){.ui-plate{grid-template-areas:"ways" "line" "hour"}.ui-hour .ui-skip{margin-left:auto}}
+.ui-hour{grid-area:hour;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;min-width:0}
+.ui-line{font:400 var(--fs-l)/1.2 var(--font-head);color:var(--ink)}
+.ui-line [data-hour-line]{font-style:italic}
+.ui-chose{font-size:var(--fs-m);color:var(--ink-2)}
+.ui-more,.ui-h,.ui-open,.ui-done,.ed .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:var(--hit);padding:0 16px;border-radius:999px;border:1px solid var(--ctl);
+  background:var(--surface);color:var(--ink);font:650 var(--fs-s)/1.1 var(--font-ui);text-decoration:none;cursor:pointer;white-space:nowrap}
+.ui-more:hover,.ui-h:hover,.ui-open:hover,.ui-done:hover,.ed .btn:hover{border-color:var(--verd);background:var(--verd-soft)}
+.ui-hours{display:flex;flex-wrap:wrap;gap:6px;width:100%}
+.ui-hnote{flex-basis:100%;margin:2px 0 0;font-size:var(--fs-xs);line-height:1.35;color:var(--ink-2)}
+.ui-h:disabled{cursor:not-allowed;border-style:dashed;color:var(--ink-2);background:transparent}
+.ui-h[aria-pressed="true"]{background:var(--verd);border-color:var(--verd);color:var(--on-ink)}
+.ui-back{border-style:dashed}
+/* the way down to the paper: a quiet link, not a button that outshouts the picture */
+.ed .ui-skip{display:inline-flex;align-items:center;gap:8px;min-height:var(--hit);padding:0 4px;border-radius:4px;color:var(--verd-ink);font:650 var(--fs-s)/1.15 var(--font-ui);
+  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.22em;white-space:nowrap}
+.ed .ui-skip:hover{color:var(--ink)}
+.ed[data-mode="plain"] .ui-skip{display:none}
+.ui-skip::after{content:"";width:.45em;height:.45em;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-.12em) rotate(45deg)}
+/* Ways to read and Done belong to the plate over the film only */
+.ed .ui-open,.ed .ui-done{display:none}
+.ui-pv{font:italic 400 var(--fs-s)/1 var(--font-head);color:var(--ink-2)}
+.ui-ways{grid-area:ways;margin:0;padding:0;border:0;min-width:0;display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+html:not(.ed-page) .ui-ways{display:none}      /* scripts off (the line before the first frame never ran): the choice cannot work, so it is not offered */
+html:not(.ed-page) .ui-plate{grid-template-areas:"hour"}
+.ui-ways legend{float:left;grid-column:1 / -1;width:100%;margin:0 0 2px;padding:0;font:700 var(--fs-xs)/1.3 var(--font-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--brass-ink)}
+@media (min-width:48em){.ui-ways{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ui-way{position:relative;display:flex;align-items:flex-start;gap:10px;min-height:var(--hit);padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius-s);background:var(--surface);cursor:pointer}
+.ui-way:hover{border-color:var(--verd)}
+.ui-way input{flex:none;width:20px;height:20px;margin:1px 0 0;accent-color:var(--verd)}
+.ui-way span{display:grid;gap:2px;min-width:0}
+.ui-way b{font:700 var(--fs-m)/1.2 var(--font-ui);color:var(--ink)}
+.ui-way small{font-size:var(--fs-s);line-height:1.35;color:var(--ink-2)}
+.ui-way:has(input:checked){border-color:var(--verd);background:var(--verd-soft);box-shadow:inset 0 0 0 1px var(--verd)}
+.ui-way:has(input:focus-visible){outline:var(--focus-w) solid var(--focus);outline-offset:2px}
+.ui-way input:focus-visible{outline:none}
+html.ed-page[data-contrast="high"] .ui-way{border:2px solid #000000}
+html.ed-page[data-contrast="high"] .ui-way:has(input:checked){background:#FFFFFF;box-shadow:inset 0 0 0 3px #000000}
+.ui-wayline{grid-area:line;font-size:var(--fs-s);color:var(--ink-2)}
+.ui-wayline.is-own{display:none}
+.ui-wayline button{all:unset;cursor:pointer;color:var(--verd-ink);text-decoration:underline;text-underline-offset:.18em;font-weight:650;padding:0 2px;display:inline-flex;align-items:center;min-height:var(--hit,44px)}
+.ui-wayline button:focus-visible{outline:var(--focus-w) solid var(--focus);outline-offset:2px}
+
+/* ============================== the paper: newsprint ground ============================== */
+.ed-paper{position:relative;background-color:var(--np);background-image:var(--grain);padding:clamp(18px,3vw,40px) 0 clamp(30px,5vw,64px);outline:none}
+.ed-paper::before{content:"";position:absolute;inset:0 0 auto;height:min(900px,100vh);pointer-events:none;opacity:0;transition:opacity .9s ease;
+  background:radial-gradient(70% 60% at 18% 0%,var(--lamp-glow),transparent 72%)}
+.ed[data-lamp="on"] .ed-paper::before{opacity:1}
+html.ed-page:is([data-motion="reduced"],[data-calm="on"]) .ed-paper::before{transition:none}
+.ed-slot{position:relative;margin:0 auto}
+.ed[data-fit="box"] .ed-slot{width:var(--slot-w,1200px);height:var(--slot-h,1100px)}
+.ed[data-fit="flow"] .ed-slot{max-width:1240px;padding:0 var(--gutter)}
+
+/* ---------- the live area (#paper-live). Flow first: ordinary text in the reader's own size and face ---------- */
+.ed-live{position:relative;color:var(--ink);font-family:var(--font-body);font-size:var(--fs-m);line-height:var(--lh-body)}
+.ed-live a{color:inherit;text-decoration:none}
+.ed-live a:hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.14em}
+.pl-mast{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"p p" "l r";gap:12px 18px;align-items:end;padding:0 0 12px}
+.pl-plate{grid-area:p;display:grid;justify-items:center;gap:6px;text-align:center;min-width:0}
+.pl-name{display:flex;align-items:center;justify-content:center;gap:.2em;margin:0;font:var(--head-style) var(--head-weight) clamp(2.5rem,1.4rem + 5.4vw,5.8rem)/.95 var(--font-head);letter-spacing:-.012em;white-space:nowrap;color:var(--ink)}
+.ed-live:not(.is-box) .pl-name{flex-wrap:wrap;white-space:normal;text-align:center;font-size:min(clamp(2.5rem,1.4rem + 5.4vw,5.8rem),14vw);overflow-wrap:anywhere}
+.pl-em{width:.8em;height:.8em;flex:none;border-radius:.12em}
+.pl-motto{font:italic 400 clamp(.95rem,.85rem + .35vw,1.2rem)/1.25 var(--font-head);color:var(--ink-2)}
+.pl-ear{grid-area:l;display:grid;gap:3px;align-content:end;min-width:0;font-family:var(--font-ui)}
+.pl-ear-r{grid-area:r;justify-items:end;text-align:right}
+.pl-ear{overflow-wrap:anywhere}
+.pl-ear .cd{white-space:normal}
+/* very narrow screens (or very large text): the two ears stack under the name instead of squeezing beside each other */
+@media (max-width:22.5em){
+  .ed-live:not(.is-box) .pl-mast{grid-template-columns:minmax(0,1fr);grid-template-areas:"p" "l" "r"}
+  .ed-live:not(.is-box) .pl-ear-r{justify-items:start;text-align:left}
+}
+.pl-k{font:700 var(--fs-xs)/1.3 var(--font-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--brass-ink)}
+.pl-date{font:400 var(--fs-xl)/1.15 var(--font-head);color:var(--ink);text-wrap:balance}
+.pl-sub{text-wrap:balance}
+.pl-date a{color:var(--ink)}
+.pl-sub{font-size:var(--fs-s);line-height:1.35;color:var(--ink-2)}
+.pl-short{display:none}
+.pl-ox{height:7px;border-top:3px solid var(--np-rule-2);border-bottom:1px solid var(--np-rule-2)}
+.pl-folio{display:flex;flex-wrap:wrap;align-items:center;gap:4px 20px;padding:8px 0;border-bottom:1px solid var(--np-rule-2);font:700 var(--fs-xs)/1.3 var(--font-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.pl-term{display:inline-flex;align-items:center;gap:9px}
+.pl-bar{display:inline-block;width:72px;height:5px;background:var(--np-rule)}
+.pl-bar i{display:block;height:100%;background:var(--brass)}
+.pl-vow{margin-left:auto;color:var(--ink)}
+.pl-body{display:grid;grid-template-columns:minmax(0,1fr);gap:22px 36px;padding-top:18px}
+@media (min-width:48em){.ed-live:not(.is-box) .pl-body{grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)}
+  .ed-live:not(.is-box) .pl-side{border-left:1px solid var(--np-rule);padding-left:28px}}
+@media (min-width:62em){.ed-live:not(.is-box) .pl-mast{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"l p r"}}
+.pl-kick{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 1em;font:700 var(--fs-xs)/1.3 var(--font-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--verd-ink)}
+.pl-kd{color:var(--brass-ink);font-variant-numeric:tabular-nums}
+.pl-head{margin:.28em 0 0;font:var(--head-style) var(--head-weight) clamp(2rem,1.25rem + 3.1vw,3.7rem)/1.02 var(--font-head);letter-spacing:-.006em;text-wrap:balance}
+.pl-deck{margin-top:.55em;font:italic 400 clamp(1.12rem,1rem + .5vw,1.45rem)/1.35 var(--font-head);color:var(--ink-2);text-wrap:pretty;max-width:54ch}
+.pl-items{list-style:none;margin:16px 0 0;padding:0}
+.pl-items li{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;padding:9px 0;border-top:1px solid var(--np-rule)}
+.pl-items a{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;padding-block:11px;margin-block:-11px}
+/* headlines: the link's own padding makes each line a target of about 44 px without moving a line of type */
+.pl-head a,.pl-sh a,.rs-sh a{padding-block:max(.2em,11px)}
+.pl-items b{font:400 var(--fs-l)/1.2 var(--font-head);color:var(--ink)}
+.pl-id{font:600 var(--fs-s)/1.2 var(--font-ui);color:var(--ink-2)}
+.pl-tag{margin-left:auto;font:700 var(--fs-xs)/1.2 var(--font-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--verd-ink);white-space:nowrap}
+.pl-side{display:grid;align-content:start;gap:18px;min-width:0}
+.pl-st+.pl-st{border-top:1px solid var(--np-rule);padding-top:16px}
+.pl-sh{margin-top:.35em;font:var(--head-style) var(--head-weight) clamp(1.35rem,1.12rem + .9vw,1.9rem)/1.1 var(--font-head);text-wrap:balance}
+.pl-sdeck{margin-top:.5em;font-size:var(--fs-s);line-height:1.45;color:var(--ink-2)}
+.ed-live .ed-split{margin-top:10px}
+
+/* ---------- the live area as the paper's fixed box: px sizes inside, so it lies on the picture exactly; scaled to the column ---------- */
+.ed-live.is-box{--t:calc(1px * var(--ts,1));position:absolute;left:0;top:0;margin:0;box-sizing:border-box;overflow:clip;transform:scale(var(--fit,1));transform-origin:0 0;
+  font-size:calc(17 * var(--t));line-height:1.4;letter-spacing:normal;word-spacing:normal}
+.ed-live.is-box[data-layout="wide"]{width:1200px;height:1100px;padding:30px 46px 26px}
+.ed-live.is-box[data-layout="narrow"]{width:390px;height:607px;padding:15px 16px 12px}
+.is-box[data-layout="wide"] .pl-mast{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-areas:"l p r";gap:0 20px;padding:0 0 16px}
+.is-box[data-layout="wide"] .pl-plate{gap:7px}
+.is-box[data-layout="wide"] .pl-name{font-size:calc(100 * var(--t))}
+.is-box[data-layout="wide"] .pl-motto{font-size:calc(21 * var(--t))}
+.is-box[data-layout="wide"] .pl-ear{gap:4px}
+.is-box[data-layout="wide"] .pl-k{font-size:calc(14.5 * var(--t))}
+.is-box[data-layout="wide"] .pl-date{font-size:calc(25 * var(--t))}
+.is-box[data-layout="wide"] .pl-sub{font-size:calc(15.5 * var(--t))}
+.is-box[data-layout="wide"] .pl-ear .cd{font-size:calc(14 * var(--t))}
+.is-box[data-layout="wide"] .pl-folio{font-size:calc(14.5 * var(--t));padding:11px 0;gap:4px 28px}
+.is-box[data-layout="wide"] .pl-bar{width:96px;height:6px}
+.is-box[data-layout="wide"] .pl-body{grid-template-columns:minmax(0,1.95fr) minmax(0,1fr);gap:0 40px;padding-top:24px}
+.is-box[data-layout="wide"] .pl-side{border-left:1px solid var(--np-rule);padding-left:32px;gap:20px}
+.is-box[data-layout="wide"] .pl-st+.pl-st{padding-top:18px}
+.is-box[data-layout="wide"] .pl-kick{font-size:calc(15 * var(--t))}
+.is-box[data-layout="wide"] .pl-head{font-size:calc(76 * var(--t));line-height:.99}
+.is-box[data-layout="wide"] .pl-deck{font-size:calc(28 * var(--t));line-height:1.3;max-width:none}
+.is-box[data-layout="wide"] .pl-items{margin-top:20px}
+.is-box[data-layout="wide"] .pl-items li{padding:11px 0}
+.is-box[data-layout="wide"] .pl-items a{padding-block:12px;margin-block:-12px}
+.is-box[data-layout="wide"] .pl-items b{font-size:calc(24 * var(--t))}
+.is-box[data-layout="wide"] .pl-id{font-size:calc(16 * var(--t))}
+.is-box[data-layout="wide"] .pl-tag{font-size:calc(14 * var(--t))}
+.is-box[data-layout="wide"] .pl-sh{font-size:calc(35 * var(--t));line-height:1.07}
+.is-box[data-layout="wide"] .pl-sdeck{font-size:calc(17.5 * var(--t));line-height:1.42}
+.is-box[data-layout="wide"] .split{font-size:calc(14 * var(--t))}
+.is-box[data-layout="narrow"] [data-wide]{display:none}
+.is-box[data-layout="narrow"] .pl-mast{gap:9px 10px;padding:0 0 9px}
+.is-box[data-layout="narrow"] .pl-plate{gap:4px}
+.is-box[data-layout="narrow"] .pl-name{font-size:calc(47 * var(--t))}
+.is-box[data-layout="narrow"] .pl-motto{font-size:calc(13 * var(--t))}
+.is-box[data-layout="narrow"] .pl-ear{gap:2px}
+.is-box[data-layout="narrow"] .pl-k{font-size:calc(11.5 * var(--t))}
+.is-box[data-layout="narrow"] .pl-date{font-size:calc(16.5 * var(--t))}
+.is-box[data-layout="narrow"] .pl-sub{font-size:calc(12 * var(--t))}
+.is-box[data-layout="narrow"] .pl-ear .cd{font-size:calc(11.5 * var(--t))}
+.is-box[data-layout="narrow"] .pl-long{display:none}
+.is-box[data-layout="narrow"] .pl-short{display:inline}
+.is-box[data-layout="narrow"] .pl-folio{font-size:calc(11.5 * var(--t));padding:6px 0;gap:2px 14px}
+.is-box[data-layout="narrow"] .pl-bar{width:54px;height:4px}
+.is-box[data-layout="narrow"] .pl-vow{display:none}
+.is-box[data-layout="narrow"] .pl-body{gap:12px;padding-top:12px}
+.is-box[data-layout="narrow"] .pl-kick{font-size:calc(11.5 * var(--t))}
+.is-box[data-layout="narrow"] .pl-head{font-size:calc(31 * var(--t));line-height:1.03}
+.is-box[data-layout="narrow"] .pl-deck{font-size:calc(16 * var(--t));line-height:1.34}
+.is-box[data-layout="narrow"] .pl-side{border-top:2px solid var(--np-rule-2);padding-top:9px;gap:10px}
+.is-box[data-layout="narrow"] .pl-st+.pl-st{padding-top:10px}
+.is-box[data-layout="narrow"] .pl-sh{font-size:calc(19.5 * var(--t));line-height:1.12}
+
+/* ---------- printed: the live area on the picture's paper, on the prints, and in the sample pictures: dark ink, light paper ---------- */
+.ed-inked{color-scheme:light;--ink:#17191C;--ink-2:#3B4047;--np:#FFFFFF;--np-2:#EFE8DA;--np-rule:#A39B89;--np-rule-2:#17191C;--brass:#A8762E;--brass-ink:#5F4111;--brass-soft:#F1E4CB;
+  --verd-ink:#22564A;--dem:#2E5BE6;--rep:#D8453A;--oth:#5E6570;--font-head:"Instrument Serif",Georgia,serif;--font-body:"Instrument Sans",system-ui,sans-serif;--font-ui:"Instrument Sans",system-ui,sans-serif;
+  --head-weight:400;--head-style:normal;color:var(--ink)}
+
+/* ============================== below the live area: the rest of the front page ============================== */
+.ed-rest{max-width:var(--rest-w,1240px);margin:0 auto;padding:clamp(22px,3vw,36px) var(--gutter) 0}
+.ed[data-fit="box"] .ed-rest{padding-left:max(var(--gutter),calc((100% - var(--rest-w,1240px)) / 2));padding-right:max(var(--gutter),calc((100% - var(--rest-w,1240px)) / 2));max-width:none}
+.ed-rest>*+*{margin-top:clamp(26px,3.4vw,40px)}
+.rs-slug{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin:0 0 10px;padding-top:9px;border-top:3px solid var(--np-rule-2);font:700 var(--fs-xs)/1.3 var(--font-ui);letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.rs-slug span{font-weight:650;letter-spacing:.08em;color:var(--brass-ink)}
+.ed .fine{font-size:var(--fs-xs);line-height:1.45;color:var(--ink-2);margin-top:6px}
+.rs-items{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:0 30px}
+@media (min-width:48em){.rs-items{grid-template-columns:repeat(auto-fit,minmax(17rem,1fr))}}
+.rs-items>li{padding:11px 0 14px;border-top:1px solid var(--np-rule)}
+.rs-ih{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px}
+.rs-ih a{display:inline-flex;flex-wrap:wrap;align-items:baseline;align-content:center;gap:2px 10px;min-height:var(--hit,44px);color:var(--ink);text-decoration:none}
+.rs-ih a:hover b{text-decoration:underline;text-decoration-thickness:1px}
+.rs-ih b{font:var(--head-style) var(--head-weight) var(--fs-xl)/1.15 var(--font-head)}
+.rs-id{font:650 var(--fs-s)/1.2 var(--font-ui);color:var(--ink-2)}
+.rs-ih .pl-tag{margin-left:0}
+.rs-title{margin-top:5px;font-size:var(--fs-s);line-height:1.45;color:var(--ink-2)}
+.rs-what{margin-top:7px;font-size:var(--fs-m);line-height:var(--lh-body);max-width:var(--measure)}
+.rs-first{display:none}
+.ed[data-fit="box"][data-layout="narrow"] .rs-first{display:grid;gap:0}
+.rs-st{padding:12px 0 18px;border-top:1px solid var(--np-rule);min-width:0}
+.rs-sh{margin-top:.35em;font:var(--head-style) var(--head-weight) clamp(1.3rem,1.1rem + .8vw,1.75rem)/1.12 var(--font-head);text-wrap:balance}
+.rs-sh a{color:var(--ink);text-decoration:none}
+.rs-sh a:hover{text-decoration:underline;text-decoration-thickness:1px}
+.rs-deck{margin-top:.5em;font-size:var(--fs-m);line-height:var(--lh-body);color:var(--ink-2);max-width:var(--measure)}
+.rs-list{margin-top:10px}
+.rs-list summary{display:inline-flex;align-items:center;gap:8px;min-height:var(--hit);cursor:pointer;color:var(--verd-ink);font:650 var(--fs-s)/1.2 var(--font-ui);list-style:none}
+.rs-list summary::-webkit-details-marker{display:none}
+.rs-list summary::before{content:"";width:.55em;height:.55em;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform var(--dur-2) var(--ease)}
+.rs-list[open] summary::before{transform:rotate(45deg)}
+.rs-list ul{margin:2px 0 0;padding-left:1.2em;display:grid;gap:5px;font-size:var(--fs-s)}
+.rs-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(26px,3.4vw,40px) 36px}
+@media (min-width:62em){.rs-grid{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,.9fr)}}
+@media (min-width:48em) and (max-width:61.99em){.rs-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.rs-coming{grid-column:1 / -1}}
+.ed-rest .rs-grid{margin-top:clamp(26px,3.4vw,40px)}
+.rs-links{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:10px}
+.rs-links a{display:inline-flex;align-items:center;min-height:var(--hit);font:650 var(--fs-s)/1.2 var(--font-ui)}
+.rs-p{font-size:var(--fs-m);line-height:var(--lh-body)}
+
+/* the docket: what each chamber has posted, with a countdown */
+.dk{list-style:none;margin:0;padding:0}
+.dk-day{padding:9px 0 10px;border-top:1px solid var(--np-rule)}
+.dk-d{display:flex;gap:.6em;font:700 var(--fs-xs)/1.3 var(--font-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--brass-ink);margin-bottom:5px}
+.dk-d [data-rel]:empty{display:none}
+.dk-d [data-rel]{color:var(--verd-ink)}
+.dk-day ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.dk-i{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:baseline}
+.dk-i>p{font-size:var(--fs-s);line-height:1.42}
+.dk-i a{color:var(--ink);text-decoration:none}
+/* list links are whole rows of at least 44 px, so a thumb finds them */
+.dk-i a,.rs-src a,.rs-list li a{display:inline-flex;align-items:center;min-height:var(--hit,44px)}
+.dk-i a:hover{text-decoration:underline}
+.lt{display:block;margin-top:1px;font-size:var(--fs-xs);color:var(--ink-2)}
+.lt:empty{display:none}
+.cd{display:inline-flex;align-items:center;gap:.4em;padding:.3em .6em;border-radius:3px;background:var(--brass-soft);color:var(--brass-ink);font:700 var(--fs-xs)/1.2 var(--font-ui);font-variant-numeric:tabular-nums;letter-spacing:.02em;white-space:nowrap}
+.cd::before{content:"";flex:none;width:.66em;height:.66em;border:1.5px solid currentColor;border-radius:50%;background:conic-gradient(currentColor 0 25%,transparent 0)}
+.cd[data-past]{background:var(--np-2);color:var(--ink-2)}
+html.ed-page[data-contrast="high"] .cd{background:#FFFFFF;border:1px solid #000000}
+
+/* the session so far */
+.tiles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px}
+.tiles>li{border-top:1px solid var(--np-rule);padding:9px 0 11px;min-width:0}
+.tiles a{display:grid;gap:3px;min-height:var(--hit);color:var(--ink);text-decoration:none}
+.tiles b{font:400 clamp(1.8rem,1.35rem + 1.1vw,2.4rem)/1 var(--font-head);font-variant-numeric:lining-nums tabular-nums;color:var(--ink)}
+html.ed-page:is([data-face="dyslexia"],[data-face="hyperlegible"]) .tiles b{font-weight:700}
+.tiles span{font-size:var(--fs-s);line-height:1.3;color:var(--ink-2)}
+.tiles a:hover span{text-decoration:underline;color:var(--verd-ink)}
+
+/* the count after the vote */
+.stampline{margin:4px 0 12px 4px}
+.stamp{display:inline-block;padding:.55em .8em;border:1.5px solid currentColor;outline:1px solid currentColor;outline-offset:2px;border-radius:2px;rotate:-2deg;
+  font:700 var(--fs-xs)/1 var(--font-ui);letter-spacing:.16em;text-transform:uppercase;color:var(--brass-ink);background:var(--np)}
+html.ed-page:is([data-motion="reduced"],[data-calm="on"],[data-contrast="high"]) .stamp{rotate:none}
+
+/* how each party voted: the only red and blue on the page */
+.split{display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px 16px;font:650 var(--fs-xs)/1.2 var(--font-ui);font-variant-numeric:tabular-nums;color:var(--ink)}
+.sp-t{font-weight:800}
+.sp{display:inline-grid;grid-template-columns:auto auto;align-items:baseline;gap:3px 6px}
+.sp abbr{text-decoration:none;font-weight:800}
+.spb{grid-column:1 / -1;display:block;height:6px;min-width:70px;background:color-mix(in srgb,var(--oth) 24%,var(--np))}
+.spb i{display:block;height:100%;background:var(--oth)}
+.sp-d .spb{background:color-mix(in srgb,var(--dem) 22%,var(--np))}.sp-d .spb i{background:var(--dem)}
+.sp-r .spb{background:color-mix(in srgb,var(--rep) 22%,var(--np))}.sp-r .spb i{background:var(--rep)}
+html.ed-page[data-contrast="high"] .spb{outline:1px solid #000000}
+
+/* more from the record */
+.rs-cols{display:grid;grid-template-columns:minmax(0,1fr);gap:0 32px}
+@media (min-width:48em){.rs-cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:75em){.rs-cols{grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}}
+.ed .tca-lv-more{display:flex;margin:22px auto 0}
+
+/* how the page is put together */
+.how{font-size:var(--fs-s);line-height:1.55;color:var(--ink-2);max-width:78ch;border:1px solid var(--np-rule);border-left:3px solid var(--brass);padding:12px 16px;background:color-mix(in srgb,var(--np-2) 60%,transparent)}
+.how b{color:var(--ink)}
+.how a{white-space:nowrap}
+.rs-src{margin:12px 0 0;padding-left:1.2em;display:grid;gap:6px;font-size:var(--fs-s);line-height:1.45;max-width:78ch}
+
+/* ============================== the card and the slip the picture prints (sources; never shown on the page itself) ============================== */
+.ed-prints{position:absolute;left:-12000px;top:0;width:1px;height:1px;overflow:clip;pointer-events:none}
+.ed-card,.ed-slip{box-sizing:border-box;background:#FFFFFF;color:#17191C;font-family:"Instrument Sans",system-ui,sans-serif;overflow:clip;position:relative}
+.ed-card{width:381px;height:228px;padding:15px 21px 13px;display:grid;grid-template-rows:auto 1fr auto;gap:5px;
+  background-image:linear-gradient(#A8762E,#A8762E),repeating-linear-gradient(to bottom,transparent 0 27px,rgba(47,107,94,.26) 27px 28px);
+  background-size:100% 2px,100% calc(100% - 61px);background-position:0 44px,0 50px;background-repeat:no-repeat}
+.cd-k,.sl-k{font:700 12.5px/1.2 "Instrument Sans",system-ui,sans-serif;letter-spacing:.13em;text-transform:uppercase;color:#5F4111}
+.cd-q{align-self:center;font:400 23px/1.17 "Instrument Serif",Georgia,serif;color:#17191C;text-wrap:balance}
+.cd-f{font:italic 400 14px/1.2 "Instrument Serif",Georgia,serif;color:#3B4047;text-align:right}
+.ed-slip{width:300px;height:420px;padding:19px 19px 14px;display:grid;grid-template-rows:auto auto 1fr auto;gap:6px;border-top:4px solid #17191C}
+.ed-slip .sl-k{font-size:15px}
+.sl-when{font:italic 400 18px/1.2 "Instrument Serif",Georgia,serif;color:#3B4047}
+.sl-list{list-style:none;margin:5px 0 0;padding:0;display:grid;align-content:start;gap:8px}
+.sl-list li{display:grid;gap:2px;padding-top:7px;border-top:1px solid #C9C1AE;font:400 15px/1.28 "Instrument Sans",system-ui,sans-serif;color:#17191C}
+.sl-list li b{font:700 12.5px/1.2 "Instrument Sans",system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#5F4111}
+.sl-more{font:italic 400 17px/1.2 "Instrument Serif",Georgia,serif;color:#3B4047;text-align:right}
+
+/* ============================== the panel (the other two ways, the whole list since a last visit) ============================== */
+.ed-pop{position:fixed;inset:0;margin:auto;width:min(600px,calc(100vw - 24px));height:fit-content;max-height:calc(100svh - 32px);overflow:auto;padding:0;
+  border:1px solid var(--line-strong);border-radius:var(--radius-l);background:var(--surface);color:var(--ink);box-shadow:var(--shadow-2);z-index:90;overscroll-behavior:contain}
+.ed-pop::backdrop{background:var(--scrim)}
+.ed-pop.is-fallback{display:block}
+.pop-card{padding:20px clamp(16px,3vw,26px) 18px;font-family:var(--font-ui);line-height:var(--lh-ui)}
+.pop-h{margin:0 0 10px;font:var(--head-style) var(--head-weight) var(--fs-2xl)/1.1 var(--font-head);outline:none}
+.pop-body{display:grid;gap:12px;font-size:var(--fs-m);line-height:var(--lh-body)}
+.pop-body p{color:var(--ink-2)}
+.pop-pic{margin:0;border-radius:var(--radius-m);overflow:clip;background:linear-gradient(160deg,#EFE6D2,#D8C8A6 55%,#B99F72);position:relative}
+html.ed-page[data-contrast="dark"] .pop-pic{background:linear-gradient(160deg,#2A2621,#3A3226 55%,#4B3E2A)}
+.pop-pic img{display:block;width:100%;aspect-ratio:16 / 9;height:auto;object-fit:cover}
+.pop-pic figcaption{padding:2px 12px 10px;font:italic 400 var(--fs-m)/1.2 var(--font-head);color:#3A2C14}
+html.ed-page[data-contrast="dark"] .pop-pic figcaption{color:#E8DCC2}
+.pop-pic svg{display:block;width:100%;height:auto;aspect-ratio:16 / 9}
+.pop-links{margin:-6px 0 0;padding-left:1.3em;display:grid}
+.pop-links a{display:inline-flex;align-items:center;min-height:var(--hit,44px)}
+.pop-list{list-style:none;margin:0;padding:0;display:grid;gap:0;max-height:min(52vh,520px);overflow:auto}
+.pop-list li{display:grid;grid-template-columns:7.2em minmax(0,1fr);gap:2px 12px;align-items:center;padding:0;border-top:1px solid var(--line);font-size:var(--fs-s);line-height:1.4}
+.pop-list li a{display:flex;align-items:center;min-height:var(--hit,44px);padding:4px 0}
+.pop-list li span{font:700 var(--fs-xs)/1.4 var(--font-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--brass-ink)}
+.pop-acts{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px;margin-top:16px}
+.pop-acts a,.pop-x{display:inline-flex;align-items:center;justify-content:center;min-height:var(--hit);padding:0 18px;border-radius:999px;border:1px solid var(--ctl);background:var(--surface);color:var(--ink);font:650 var(--fs-s)/1 var(--font-ui);text-decoration:none;cursor:pointer}
+.pop-acts .go{background:var(--verd);border-color:var(--verd);color:var(--on-ink)}
+@media (max-width:30em){.pop-list li{grid-template-columns:minmax(0,1fr)}}
+
+/* ============================== the companion's place at the table's edge (the site's own dock, moved, never redrawn) ============================== */
+html.ed-page.ed-comp-table .tca-dock{position:absolute;right:auto;bottom:auto;left:var(--ed-comp-x);top:var(--ed-comp-y)}
+/* it fades from one place to the other instead of jumping (no fade with motion off: the durations are 0 then) */
+html.ed-page .tca-dock{transition:transform var(--dur-3) var(--ease),opacity calc(var(--dur-3) * .8) ease,visibility 0s linear 0s}
+html.ed-page:is(.ed-comp-fade,.ed-comp-away) .tca-dock{opacity:0;pointer-events:none}
+html.ed-page.ed-comp-away .tca-dock{visibility:hidden;transition:opacity calc(var(--dur-3) * .8) ease,visibility 0s linear calc(var(--dur-3) * .8)}
+/* lit as the room is: at dusk and night it stands in lamplight, not noon */
+html.ed-page.ed-comp-table:is([data-ed-hour="dusk"],[data-ed-hour="night"]) .tca-dock{filter:brightness(.62) saturate(.8)}
+/* on the page it stands whole in its corner only where no words are under it (edition.js fades it away while there are),
+   so it has no need to step half off the screen while the reader scrolls: never cut by the window's edge here */
+html.ed-page .tca-dock[data-rest="floor"].ducked{transform:none}
+/* the site's first-visit card waits while the picture holds the paper (edition.js shows this marker only then) */
+.ed-hold{display:none;position:fixed;left:0;top:0;width:1px;height:1px;visibility:hidden;pointer-events:none}
+html.ed-held .ed-hold{display:block}
+
+/* ============================== film: the film's engine plays the room, leans down to the paper and leaves it on the page ==============================
+   The engine takes #paper-live, the card, the slip and the plate (#ed-ui, its overlay) into the picture, grows the stage
+   into a scroll track and puts the paper where the page's slot says. Its classes all start tca-st-. */
+.ed[data-mode="film"] .ed-stage{height:100vh;height:100lvh;background-color:var(--np);background-image:var(--grain);--st-page-ink:#1A1C20}
+.ed[data-mode="film"] .ed-stage::after{content:none}
+.ed[data-mode="film"] .ed-first:empty,.ed[data-mode="film"] .ed-slot:empty{display:none}
+/* dark pages: the paper keeps a lit table under it, since ink printed on a dark ground cannot be read */
+html.ed-page[data-contrast="dark"] .ed[data-mode="film"] .ed-stage{background-color:#ECE5D5;background-image:none}
+/* the paper prints in its own dark ink, whatever the page's theme */
+.tca-st-ink .ed-live{--ink:#1A1C20;--ink-2:#545961;--line:#DDD7CA;--brass:#A8762E;--brass-ink:#7A5418;--brass-soft:#F1E4CB;--verd:#2F6B5E;--verd-ink:#2F6B5E;--np:#F8F3E8;--np-2:#EFE8DA;
+  --np-rule:#D3CAB6;--np-rule-2:#1A1C20;--dem:#2E5BE6;--rep:#D8453A;--oth:#646B76;--focus:#2F6B5E;color-scheme:light}
+/* at night the lamp's falloff darkens the paper, so the second inks print darker and the ink goes on at full density.
+   Multiplied ink can only darken the paper under it: where the lamp leaves the paper too dark, no ink reaches 4.5:1, and
+   there the type is read after the hand-over (on the page's own ground) or in the still */
+.ed[data-hour="night"] .tca-st-ink .ed-live{--ink-2:#33373D;--verd-ink:#1F4D43;--brass-ink:#5C3F10}
+.ed[data-hour="night"] .ed-ov .ed-inked{--ink-2:#2C3035;--verd-ink:#1D4A40;--brass-ink:#4F360D}
+.ed[data-hour="night"] .tca-st{--st-ink-a:1}
+/* nothing printed on the picture until the film's own picture is in (the still under it is framed a little differently) */
+.ed .tca-st:not([data-ready]) .tca-st-ink{visibility:hidden!important}
+.ed-cspot{display:block;width:0;height:0;pointer-events:none!important}
+/* the plate rides on the picture in the engine's own layer, which fades while the reader scrolls. Closed it is one slim
+   line of glass: the hour, the way past (when the film's own would stand on the paper) and "Ways to read". Open it is
+   the whole plate, at the corner edition.js finds clear of the paper (data-at: the floor left of the table first), and on
+   a phone a sheet from the bottom. Its foot sits where the screen's visible foot is: above the tab bar, under the draft
+   notice's push, inside the phone's toolbars. */
+.ed[data-mode="film"]{--ed-foot:calc(100lvh - 100svh + max(16px,env(safe-area-inset-bottom)) + var(--ed-above,0px) + var(--ed-below,0px))}
+.tca-st-ui .ed-ui{position:absolute;inset:0;pointer-events:none;font:400 var(--fs-m)/var(--lh-ui) var(--font-ui);color:var(--ink)}
+/* the film's layer sets its own type and focus ring for its controls; the plate keeps the page's */
+.tca-st-ui .ed-ui :is(button,a){font:650 var(--fs-s)/1.15 var(--font-ui)}
+.tca-st-ui .ed-ui .ui-wayline button{color:var(--verd-ink)}
+.tca-st-ui .ed-ui :focus-visible:not(input){outline:var(--focus-w) solid var(--focus);outline-offset:3px;box-shadow:none}
+.tca-st-ui .ed-ui input:focus-visible{outline:none;box-shadow:none}
+.tca-st-ui .ui-plate{position:absolute;top:calc(var(--ed-bar,62px) + 14px);right:var(--gutter);display:flex;flex-direction:column;align-items:stretch;gap:12px;
+  width:max-content;max-width:min(600px,calc(100% - 2 * var(--gutter)));margin:0;padding:5px 5px 5px 18px;border-color:transparent;border-radius:27px;pointer-events:auto;
+  background:var(--glass);box-shadow:0 6px 22px rgba(20,14,8,.18);-webkit-backdrop-filter:blur(18px) saturate(1.15);backdrop-filter:blur(18px) saturate(1.15)}
+.tca-st-ui .ui-plate:not(.is-open):not(.is-measure){overflow:visible}
+.tca-st-ui .ui-plate::before{content:none}
+.tca-st-ui .ui-plate *{pointer-events:auto}
+.tca-st-ui .ui-plate[data-at="tl"]{left:var(--gutter);right:auto}
+.tca-st-ui .ui-plate:is([data-at="bl"],[data-at="br"]){top:auto;bottom:var(--ed-foot)}
+.tca-st-ui .ui-plate[data-at="bl"]{left:var(--gutter);right:auto}
+.tca-st-ui .ui-hour{flex-wrap:wrap;gap:6px 12px}
+.tca-st-ui .ui-line{font-size:var(--fs-m);line-height:1.25;padding-block:4px}
+.tca-st-ui .ui-chose{font-size:var(--fs-s)}
+.tca-st-ui .ui-open{background:color-mix(in srgb,var(--surface) 90%,transparent);border-color:color-mix(in srgb,var(--ctl) 70%,transparent)}
+.tca-st-ui .ui-open::after{content:"";width:.42em;height:.42em;margin-left:2px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-.12em) rotate(45deg)}
+.ed .tca-st-ui .ui-open{display:inline-flex}
+/* closed: only the line, Back to my hour, the way past where the plate carries it, and Ways to read */
+.tca-st-ui .ui-plate:not(.is-open):not(.is-measure) :is(.ui-more,.ui-hours,.ui-ways,.ui-wayline,.ui-done){display:none!important}
+.ed:not([data-skip="plate"]) .tca-st-ui .ui-skip{display:none}
+.ed[data-skip="plate"] .tca-st-ui .tca-st-skip{display:none}
+/* open: the whole plate, the button that opened it gives way to Done at its foot (is-measure: the same size, laid out
+   for a moment while edition.js finds a corner for it, with nothing hidden that may hold the focus) */
+.tca-st-ui .ui-plate:is(.is-open,.is-measure){width:min(380px,calc(100% - 2 * var(--gutter)));max-height:calc(100svh - var(--ed-bar,62px) - var(--ed-above,0px) - var(--ed-below,0px) - 40px);overflow:auto;
+  overscroll-behavior:contain;padding:14px 14px 12px 16px;border-radius:var(--radius-l);border-color:var(--line);
+  background:color-mix(in srgb,var(--surface) 93%,transparent);box-shadow:0 12px 36px rgba(20,14,8,.30)}
+.tca-st-ui .ui-plate.is-open::before{content:""}
+.ed .tca-st-ui .ui-plate.is-open .ui-open{display:none}
+.ed .tca-st-ui .ui-plate:is(.is-open,.is-measure) .ui-done{display:inline-flex;align-self:flex-end}
+.tca-st-ui .ui-ways{grid-template-columns:minmax(0,1fr);gap:6px}
+/* the wide plate (a screen where no corner of the narrow one clears the paper): the ways side by side, along the top */
+.tca-st-ui .ui-plate.is-wide:is(.is-open,.is-measure){width:min(760px,calc(100% - 2 * var(--gutter)))}
+.tca-st-ui .ui-plate.is-wide .ui-ways{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tca-st-ui .ui-way{padding:8px 10px}
+/* the hours open: the ways step aside, and the hours' own Done closes them */
+.ui-plate.is-hours :is(.ui-ways,.ui-wayline){display:none!important}
+.ed .tca-st-ui .ui-plate.is-hours .ui-done{display:none}
+.tca-st-ui .tca-st-skip{font-family:var(--font-ui);font-size:var(--fs-s);font-weight:650;bottom:var(--ed-foot)}
+html.ed-page[data-contrast="dark"] .tca-st-ui .ui-plate.is-open{background:color-mix(in srgb,var(--surface) 94%,transparent)}
+html.ed-page[data-contrast="high"] .tca-st-ui .ui-plate{background:#FFFFFF;border:2px solid #000000;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+@media (prefers-reduced-transparency:reduce){.tca-st-ui .ui-plate{background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none}}
+/* phones: closed, one line of glass under the bar (the hour in small italic and Ways to read; the way past shows there
+   when a key reaches it, since at the picture's foot it stood on the paper); open, a sheet from the bottom of the screen */
+@media (max-width:540px){
+  .ed .tca-st-ui .tca-st-skip{display:none}
+  .tca-st-ui .ui-plate{left:10px;right:10px;width:auto;max-width:none;top:calc(var(--ed-bar,62px) + 8px);padding:4px 4px 4px 14px}
+  .tca-st-ui .ui-plate:not(.is-open) .ui-hour{flex-wrap:nowrap;position:relative}
+  .tca-st-ui .ui-plate:not(.is-open) .ui-line{flex:1 1 auto;min-width:0;font-size:var(--fs-s);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tca-st-ui .ui-plate:not(.is-open) :is(.ui-chose,.ui-back){display:none!important}
+  .ed[data-mode] .tca-st-ui .ui-skip{display:inline-flex}
+  .tca-st-ui .ui-plate:not(.is-open) .ui-skip:not(:focus){position:absolute;width:1px;height:1px;min-height:0;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .tca-st-ui .ui-plate:not(.is-open) .ui-skip:focus{position:absolute;left:0;top:0;bottom:0;z-index:1;padding:0 14px;border-radius:999px;background:var(--surface)}
+  .tca-st-ui .ui-open{flex:none}
+  .tca-st-ui .ui-plate.is-open{top:auto;left:0;right:0;bottom:calc(100lvh - 100svh + var(--ed-above,0px) + var(--ed-below,0px));width:auto;
+    max-height:calc(100svh - var(--ed-bar,62px) - var(--ed-above,0px) - var(--ed-below,0px) - 16px);padding:16px 14px max(12px,env(safe-area-inset-bottom));
+    border-radius:var(--radius-l) var(--radius-l) 0 0;border-width:1px 0 0;box-shadow:0 -10px 30px rgba(20,14,8,.26)}
+  .ed .tca-st-ui .ui-plate.is-open .ui-done{align-self:stretch}
+  .tca-st-ui .ui-hours{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+  .tca-st-ui .ui-hours .ui-h{padding:0 4px;font-size:var(--fs-xs);white-space:normal;text-align:center;line-height:1.1}
+  .tca-st-ui .ui-hnote{grid-column:1 / -1}
+  .tca-st-ui .ui-way:has(input[value="daily-record"]) small{display:none}
+}
+/* phones at the usual text size, under the still picture (the paper is the fixed box then): the three ways as a row of
+   names, the chosen one's plain line under them, so the paper comes soon after the picture; larger text keeps the list */
+@media (max-width:540px){
+  .ed[data-fit="box"]:not([data-mode="film"]) .ui-plate{gap:8px}
+  .ed[data-fit="box"]:not([data-mode="film"]) .ui-hour{gap:4px 10px}
+  .ed[data-fit="box"]:not([data-mode="film"]) .ui-line{font-size:var(--fs-m)}
+  .ed[data-fit="box"]:not([data-mode="film"]) .ui-ways legend{float:none;width:auto;margin:0 0 5px}
+  .ed[data-fit="box"]:not([data-mode="film"]) .ui-ways{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+  .ed[data-fit="box"]:not([data-mode="film"]) .ui-way{padding:6px 7px;gap:6px;align-items:center}
+  .ed[data-fit="box"]:not([data-mode="film"]) .ui-way input{width:16px;height:16px}
+  .ed[data-fit="box"]:not([data-mode="film"]) .ui-way b{font-size:var(--fs-s);line-height:1.15}
+  .ed[data-fit="box"]:not([data-mode="film"]) .ui-way small{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .ed[data-fit="box"]:not([data-mode="film"]) .ui-wayline.is-own{display:block}
+}
+
+/* ============================== samples: one element alone on white, ink dark (?print=live|card|slip) ============================== */
+html.ed-print,html.ed-print body{background:#FFFFFF!important;overflow:hidden!important}
+html.ed-print body *{visibility:hidden!important;animation:none!important;transition:none!important}
+html.ed-print .ed-print-target,html.ed-print .ed-print-target *{visibility:visible!important}
+html.ed-print .ed-print-target{position:fixed!important;left:0!important;top:0!important;transform:none!important;z-index:2147483647;background:#FFFFFF!important;margin:0!important;mix-blend-mode:normal!important}
+html.ed-print .tca-dock,html.ed-print .tca-bubble{display:none!important}
+
+/* ============================== print a paper copy ============================== */
+@media print{
+  .ed-hero,.ed-hooks,.ed-prints,.ed-pop,.ed .tca-lv-more{display:none!important}
+  .ed-paper{background:#FFFFFF!important;padding:0!important}
+  .ed[data-fit] .ed-slot{width:auto!important;height:auto!important}
+  .ed-live.is-box{position:static!important;transform:none!important;width:auto!important;height:auto!important;overflow:visible!important}
+}

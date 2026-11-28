@@ -1,0 +1,74 @@
+/* The Daily Record: the four things that bring a reader back (the hour is on the plate above; the other three are here).
+   Each is a plain, pretty element near the top that works with no picture, no film and no motion. */
+
+.ed-hooks{position:relative;z-index:1;padding:clamp(18px,2.6vw,30px) var(--gutter) clamp(18px,2.6vw,30px)}
+.hk-row{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:stretch}
+@media (min-width:48em){.hk-row{grid-template-columns:repeat(2,minmax(0,1fr))}.hk-slip{grid-column:1 / -1}}
+@media (min-width:62em){.hk-row{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,.95fr)}.hk-slip{grid-column:auto}}
+.ed[data-mode="film"] .ed-hooks{padding-top:0}
+/* where the paper is the fixed box, the row is as wide as the paper and the blocks under it */
+.ed[data-fit="box"] .hk-row{max-width:var(--rest-w,1240px)}
+
+.hk{position:relative;display:flex;flex-direction:column;gap:8px;min-width:0;padding:16px 18px 14px;background:var(--surface);color:var(--ink);
+  border:1px solid var(--line);border-radius:4px;box-shadow:var(--shadow-1);font-family:var(--font-ui);line-height:var(--lh-ui)}
+.hk-k{margin:0;font:700 var(--fs-xs)/1.3 var(--font-ui);letter-spacing:.13em;text-transform:uppercase;color:var(--brass-ink)}
+.hk-fine{margin-top:auto!important;padding-top:6px;font-size:var(--fs-xs);line-height:1.4;color:var(--ink-2)}
+.hk-btn,.hk-link{display:inline-flex;align-items:center;gap:9px;min-height:var(--hit);cursor:pointer;font:650 var(--fs-s)/1.15 var(--font-ui)}
+.hk-btn{padding:0 16px;border-radius:999px;border:1px solid var(--ctl);background:var(--surface);color:var(--ink)}
+.hk-btn:hover{border-color:var(--verd);background:var(--verd-soft)}
+.hk-link{all:unset;cursor:pointer;display:inline-flex;align-items:center;min-height:var(--hit);color:var(--verd-ink);font:650 var(--fs-s)/1.2 var(--font-ui);text-decoration:underline;text-underline-offset:.18em}
+.hk-link:focus-visible{outline:var(--focus-w) solid var(--focus);outline-offset:2px}
+html.ed-page[data-contrast="high"] .hk{border:2px solid #000000;box-shadow:none;border-radius:0}
+html.ed-page[data-contrast="high"] .hk-btn{border:2px solid #000000}
+
+/* since you were last here: a slip of paper */
+.hk-slip{border-top:3px solid var(--np-rule-2,var(--ink));background-image:linear-gradient(to bottom,color-mix(in srgb,var(--brass-soft) 50%,transparent),transparent 60px)}
+.hk-when{font:italic 400 var(--fs-l)/1.25 var(--font-head);color:var(--ink)}
+.hk-list{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.hk-list li{display:grid;grid-template-columns:6.6em minmax(0,1fr);gap:2px 12px;align-items:center;padding:0;border-top:1px solid var(--line);font-size:var(--fs-s);line-height:1.4}
+.hk-list a{display:flex;align-items:center;min-height:var(--hit,44px);padding:3px 0;color:var(--ink);text-decoration:none}
+.hk-list a:hover{text-decoration:underline;color:var(--verd-ink)}
+.hk-d{font:700 var(--fs-xs)/1.4 var(--font-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--brass-ink);white-space:nowrap}
+.hk-new{display:inline-block;margin-left:.4em;padding:.1em .45em;border-radius:3px;background:var(--verd-soft);color:var(--verd-ink);font:700 .7rem/1.3 var(--font-ui);letter-spacing:.08em;text-transform:uppercase;vertical-align:.12em}
+.hk-acts{display:flex;flex-wrap:wrap;gap:8px}
+@media (max-width:30em){.hk-list li{grid-template-columns:minmax(0,1fr)}}
+
+/* one question a day: an index card that turns over */
+.hk-q{background-color:var(--surface);background-image:linear-gradient(var(--brass),var(--brass));background-size:100% 2px;background-position:0 2.6em;background-repeat:no-repeat}
+html.ed-page[data-contrast="high"] .hk-q,html.ed-page[data-contrast="high"] .hk-qq{background-image:none}
+/* the question is written on the card's ruled lines: each line of text sits on one */
+.hk-qq{--rule:max(1.75rem,1.2em);font:var(--head-style) var(--head-weight) clamp(1.3rem,1.12rem + .7vw,1.7rem)/var(--rule) var(--font-head);color:var(--ink);text-wrap:balance;padding-top:4px;
+  background-image:repeating-linear-gradient(to bottom,transparent 0 calc(var(--rule) - 1px),color-mix(in srgb,var(--verd) 24%,transparent) calc(var(--rule) - 1px) var(--rule));
+  background-origin:content-box;background-clip:content-box}
+.hk-ans{margin-top:2px}
+.hk-ans>summary{list-style:none;width:fit-content}
+.hk-ans>summary::-webkit-details-marker{display:none}
+.hk-ans>summary::before{content:"";width:1.05em;height:1.05em;flex:none;border:1.5px solid currentColor;border-radius:3px;
+  background:linear-gradient(135deg,transparent 46%,currentColor 47% 53%,transparent 54%)}
+.hk-ans[open]>summary{background:var(--verd-soft);border-color:var(--verd)}
+.hk-back{margin-top:10px;padding:12px 14px;border-radius:4px;background:var(--np-2,var(--surface-2));border-left:3px solid var(--verd);display:grid;gap:7px}
+.hk-ans[open] .hk-back{animation:hk-turn var(--dur-3) var(--ease) both}
+@keyframes hk-turn{from{opacity:0;transform:perspective(600px) rotateX(-18deg);transform-origin:50% 0}to{opacity:1;transform:none}}
+.hk-a{font:var(--head-style) var(--head-weight) var(--fs-xl)/1.2 var(--font-head);color:var(--ink)}
+.hk-more{font-size:var(--fs-s);line-height:1.45;color:var(--ink-2)}
+.hk-src{font-size:var(--fs-s);color:var(--ink-2)}
+.hk-src a{font-weight:650}
+
+/* things to discover: the object of the day, the lamp's chain, a place for the companion */
+.hk-find{background-image:radial-gradient(120% 90% at 0% 0%,color-mix(in srgb,var(--brass-soft) 70%,transparent),transparent 60%)}
+.hk-obj{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:start;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.hk-obj svg{width:42px;height:42px;grid-row:span 2;color:var(--brass-ink)}
+.hk-obj b{font:var(--head-style) var(--head-weight) var(--fs-l)/1.2 var(--font-head)}
+.hk-obj p{font-size:var(--fs-s);line-height:1.45;color:var(--ink-2)}
+.hk-obj a{font-weight:650}
+.hk-lamp{padding-left:12px}
+.hk-bead{position:relative;width:14px;height:26px;flex:none}
+.hk-bead::before{content:"";position:absolute;left:50%;top:0;width:0;height:15px;border-left:2px dotted var(--brass);transform:translateX(-1px)}
+.hk-bead::after{content:"";position:absolute;left:50%;bottom:0;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#F4D9A2,var(--brass) 60%,#6B4A15)}
+.hk-lamp[aria-pressed="true"]{background:color-mix(in srgb,#F4C97A 40%,var(--surface));border-color:var(--brass)}
+.hk-lamp[aria-pressed="true"] .hk-bead::before{height:19px}
+.hk-lamp:not(:active) .hk-bead::before{transition:height var(--dur-3) var(--ease-spring)}
+html.ed-page[data-contrast="high"] .hk-lamp[aria-pressed="true"]{background:#000000;color:#FFFFFF}
+.hk-comp{font-size:var(--fs-s);line-height:1.45;color:var(--ink-2)}
+.hk-comp .hk-link{display:flex;width:fit-content}      /* on a line of its own, so its 44 px do not stretch the sentence's line */
+.hk-lampline{display:flex;flex-wrap:wrap;align-items:center;gap:8px}

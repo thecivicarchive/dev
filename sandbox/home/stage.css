@@ -1,0 +1,82 @@
+/* The Civic Archive: the home page's film (stage.js). Every name starts tca-st-. The page may set on the stage:
+   --st-top (a bar the film sits under), --st-ink (ink in the film), --st-page-ink (ink on the page), --st-ink-a (its density). */
+.tca-st{position:relative;display:block;box-sizing:content-box;-webkit-tap-highlight-color:transparent;--st-top:0px;--st-ink:#2a2018;--st-ink-a:.93;--st-film:1;--st-brass:#a8762e;--st-verd:#2f6b5e;--st-plate:rgba(246,243,236,.93);--st-plate-ink:#1a1c20}
+.tca-st[data-time=dusk],.tca-st[data-time=night]{--st-plate:rgba(26,23,20,.86);--st-plate-ink:#f1eadb;--st-brass:#c9944a}
+.tca-st-pin{position:sticky;top:var(--st-top);height:calc(100vh - var(--st-top));height:calc(100lvh - var(--st-top));pointer-events:none;overflow-x:clip}
+.tca-st[data-mode=still] .tca-st-pin{position:relative}
+/* what the page had in the stage before the film: kept under it until the film's first picture is in */
+.tca-st-under{position:absolute;inset:0;overflow:hidden;z-index:0}
+.tca-st.is-in .tca-st-under{display:none}
+.tca-st-probe{position:fixed;left:0;top:0;width:0;height:100vh;height:100svh;visibility:hidden;pointer-events:none}
+.tca-st-scene{position:absolute;inset:0;overflow:hidden;z-index:0}
+.tca-st-plane{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform,opacity}
+.tca-st-plane>*{position:absolute;left:0;top:0;width:100%;height:100%;display:block;border:0;margin:0}
+.tca-st-ph{z-index:0;transform:scale(1.05)}
+.tca-st-first{z-index:1}
+.tca-st-first img{display:block;width:100%;height:100%}
+.tca-st-loop{z-index:2;object-fit:fill}
+.tca-st-leanc{z-index:3}
+.tca-st-lamp{z-index:4;mix-blend-mode:screen;mix-blend-mode:plus-lighter}
+.tca-st-lamp[data-sub]{mix-blend-mode:difference}
+/* by day the lamp's own light is weak beside the sun: twice the layer */
+.tca-st:is([data-time=morning],[data-time=afternoon]) .tca-st-lamp:not([data-sub]){filter:brightness(2)}
+.tca-st-plane.is-lean>:not(.tca-st-leanc){visibility:hidden}
+.tca-st-gl{position:absolute;inset:0;width:100%;height:100%;z-index:5}
+
+/* the live paper, the card and the slip: ink on the photographed paper */
+.tca-st-ink{position:absolute;inset:0;z-index:1;mix-blend-mode:multiply;opacity:calc(1 - var(--st-film)*(1 - var(--st-ink-a)));clip-path:inset(0 0 -99999px 0);
+  color:var(--st-ink);color:color-mix(in srgb,var(--st-ink) calc(var(--st-film)*100%),var(--st-page-ink,var(--st-ink)))}
+.tca-st-q{position:absolute;left:0;top:0;width:0;height:0;transform-origin:0 0;will-change:transform}
+.tca-st-q.is-page{will-change:auto}
+/* one painted dot of the wrapper's own: with it Chrome draws the type in the wrapper's space, squashed with true edges; keep it */
+.tca-st-q::before{content:"";position:absolute;left:0;top:0;width:1px;height:1px;background:rgba(127,127,127,.012)}
+.tca-st-q.is-page::before{content:none}
+.tca-st-q>*{position:absolute;left:0;top:0;margin:0;transform-origin:0 0;pointer-events:auto;box-sizing:border-box}
+.tca-st-live{width:calc(var(--st-vw,1200)*1px);height:calc(var(--st-vh,1100)*1px)}
+.tca-st-q>.tca-st-live:not(.is-page){overflow:hidden;cursor:pointer}
+.tca-st-card{width:381px;height:228px;overflow:hidden}
+.tca-st-slip{width:300px;height:420px;overflow:hidden}
+.tca-st-spot{position:absolute;left:0;top:0;z-index:2;transform-origin:0 0;pointer-events:auto}
+
+/* the controls: the way past the film, the lamp's chain, the hour */
+.tca-st-ui{position:absolute;inset:0;z-index:3;font:600 13px/1.2 "Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--st-plate-ink)}
+.tca-st-ui button,.tca-st-ui a{pointer-events:auto;font:inherit;color:inherit;-webkit-tap-highlight-color:transparent}
+.tca-st-ui :focus-visible{outline:3px solid var(--st-plate-ink);outline-offset:3px;box-shadow:0 0 0 3px var(--st-plate)}
+.tca-st-ui [hidden]{display:none!important}
+.tca-st-skip{position:absolute;left:50%;bottom:18px;bottom:calc(100lvh - 100svh + max(18px,env(safe-area-inset-bottom)));transform:translateX(-50%);display:inline-flex;align-items:center;gap:9px;min-height:44px;
+  padding:0 18px 0 20px;border-radius:999px;background:var(--st-plate);border:1px solid var(--st-brass);text-decoration:none;white-space:nowrap;letter-spacing:.01em;
+  box-shadow:0 6px 24px rgba(20,14,8,.28)}
+.tca-st-skip::after{content:"";width:8px;height:8px;margin-top:-4px;border-right:2px solid var(--st-brass);border-bottom:2px solid var(--st-brass);transform:rotate(45deg)}
+.tca-st-chain{position:absolute;left:0;top:0;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer}
+.tca-st-chain::before{content:"";position:absolute;inset:12px;border-radius:50%;border:1px solid rgba(255,236,196,.6);box-shadow:0 0 9px rgba(255,214,140,.4);opacity:0;transition:opacity .25s}
+.tca-st-chain:hover::before,.tca-st-chain:focus-visible::before{border-color:rgba(255,236,196,.9);box-shadow:0 0 10px rgba(255,214,140,.7)}
+.tca-st-chain:hover::before,.tca-st-chain:focus-visible::before{opacity:1}
+.tca-st-chain span{position:absolute;left:50%;top:100%;transform:translate(-50%,2px);padding:6px 10px;border-radius:8px;background:var(--st-plate);border:1px solid var(--st-brass);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s}
+.tca-st-chain:hover span,.tca-st-chain:focus-visible span{opacity:1}
+.tca-st-dial{position:absolute;right:14px;top:14px;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.tca-st-dial-b{width:46px;height:46px;padding:0;border-radius:50%;display:grid;place-items:center;cursor:pointer;background:var(--st-plate);border:1.5px solid var(--st-brass);
+  box-shadow:0 4px 18px rgba(20,14,8,.3)}
+.tca-st-dial-b svg{color:var(--st-brass)}
+.tca-st-dial-p{display:grid;grid-template-columns:repeat(4,58px);gap:2px;padding:12px 10px 10px;border-radius:16px;background:var(--st-plate);border:1px solid var(--st-brass);
+  box-shadow:0 10px 34px rgba(20,14,8,.34);position:relative}
+.tca-st-dial-p[hidden]{display:none}
+.tca-st-dial-p::before{content:"";position:absolute;left:38px;right:96px;top:13px;height:36px;border:1px solid var(--st-brass);border-bottom:0;border-radius:60px 60px 0 0;opacity:.45;pointer-events:none}
+.tca-st-dial-p [role=radio]{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;min-height:62px;padding:7px 0 4px;border:0;background:none;border-radius:12px;cursor:pointer;font-size:11.5px;font-weight:600}
+.tca-st-dial-p [role=radio] svg{box-sizing:content-box;padding:6px;border-radius:50%;background:var(--st-plate);border:1px solid transparent}
+.tca-st-dial-p [role=radio]:nth-child(2) svg,.tca-st-dial-p [role=radio]:nth-child(3) svg{margin-top:-6px;margin-bottom:6px}
+.tca-st-dial-p [role=radio]:hover svg{border-color:var(--st-brass)}
+.tca-st-dial-p [role=radio][aria-checked=true] svg{background:var(--st-verd);color:#fff;border-color:var(--st-verd)}
+.tca-st-dial-p [role=radio]:disabled{opacity:.38;cursor:default}
+.tca-st-now{grid-column:1/-1;min-height:44px;margin-top:4px;border:1px solid var(--st-brass);border-radius:999px;background:none;cursor:pointer}
+.tca-st-now[aria-pressed=true]{background:var(--st-verd);border-color:var(--st-verd);color:#fff}
+
+@keyframes tca-st-pull{0%{transform:translateY(0)}35%{transform:translateY(7px)}100%{transform:translateY(0)}}
+@keyframes tca-st-glint{0%,100%{opacity:0}40%{opacity:.55}}
+@keyframes tca-st-bob{0%,100%{transform:rotate(45deg) translate(0,0)}50%{transform:rotate(45deg) translate(2px,2px)}}
+.tca-st[data-mode=film] .tca-st-chain.is-pulled::before{animation:tca-st-pull .32s ease-out}
+.tca-st[data-mode=film][data-ready] .tca-st-chain:not(.is-pulled)::before{animation:tca-st-glint 2.4s ease-in-out 3.5s 1}
+.tca-st[data-mode=film] .tca-st-skip::after{animation:tca-st-bob 2.2s ease-in-out infinite}
+@media (max-width:560px){.tca-st-skip{font-size:12.5px;padding:0 15px 0 17px}.tca-st-dial{right:10px;top:10px}}
+@media (forced-colors:active){.tca-st-ink{mix-blend-mode:normal;opacity:1}.tca-st-ui button,.tca-st-skip{border:1px solid ButtonText}}
+@media print{.tca-st{height:auto!important;padding:0!important;margin:0!important}.tca-st-scene,.tca-st-ui,.tca-st-under,.tca-st-q+.tca-st-q{display:none}
+  .tca-st-pin,.tca-st-ink,.tca-st-q,.tca-st-q>*{position:static;transform:none!important;width:auto;height:auto;mix-blend-mode:normal;clip-path:none}}
